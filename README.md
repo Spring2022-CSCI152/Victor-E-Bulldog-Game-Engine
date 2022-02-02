@@ -1,2 +1,2 @@
 # Team1
-A small lightweight framework for creating 2d games written in C++, C# or Java with openGL support and a layered software architecture. We would also like to use our framework to build a game to demo our engines functionality in a visually engaging way. The user will play as Victor E. Bulldog, the mascot of Fresno State University, running through campus buildings after breaking free from his handler. There will be power-ups, collectibles, enemies, and environmental interactions. Taking inspiration from “Super Mario World” on the SNES for gameplay structure, but having our own unique displays and gameplay additions.
+A small lightweight framework for creating 2d games written in C# with openGL support and a layered software architecture.
