@@ -32,6 +32,9 @@
           "lib/netstandard2.0/Microsoft.Extensions.DependencyModel.dll": {}
         }
       },
+      "Microsoft.NETFramework.ReferenceAssemblies/1.0.2": {
+        "type": "package"
+      },
       "Silk.NET.Core/2.12.0": {
         "type": "package",
         "dependencies": {
@@ -221,6 +224,17 @@
         "microsoft.extensions.dependencymodel.nuspec"
       ]
     },
+    "Microsoft.NETFramework.ReferenceAssemblies/1.0.2": {
+      "sha512": "5/cSEVld+px/CuRrbohO/djfg6++eR6zGpy88MgqloXvkj//WXWpFZyu/OpkXPN0u5m+dN/EVwLNYFUxD4h2+A==",
+      "type": "package",
+      "path": "microsoft.netframework.referenceassemblies/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+        "microsoft.netframework.referenceassemblies.nuspec"
+      ]
+    },
     "Silk.NET.Core/2.12.0": {
       "sha512": "qJ4nY/tSLsZs3ujEoTf4nW/rjaSdtqtME7VEA4jCQuZE73mADwxoeFNdY2QRCy8d2XSwFKnKXBYhs4vKgHqX8Q==",
       "type": "package",
@@ -405,6 +419,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.2",
       "Silk.NET.OpenGL >= 2.12.0"
     ]
   },
@@ -424,14 +439,14 @@
         "/Users/inderpalsingh/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
-        "net6.0"
+        "net6.0.0"
       ],
       "sources": {
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
-          "targetAlias": "net6.0",
+          "targetAlias": "net6.0.0",
           "projectReferences": {}
         }
       },
@@ -443,8 +458,14 @@
     },
     "frameworks": {
       "net6.0": {
-        "targetAlias": "net6.0",
+        "targetAlias": "net6.0.0",
         "dependencies": {
+          "Microsoft.NETFramework.ReferenceAssemblies": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[1.0.2, )",
+            "autoReferenced": true
+          },
           "Silk.NET.OpenGL": {
             "target": "Package",
             "version": "[2.12.0, )"

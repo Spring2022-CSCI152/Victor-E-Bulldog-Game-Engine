@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "V54aEtlYYIp2q0gWXkaUk35zLStVzjBySfoyilFYE4Xw1s1BkVpv+orvUEv4zReI2C0l5BXhn9UAAimOs4T9VA==",
+  "dgSpecHash": "xsfCj7OBGPQeec75ZPXHQHuBVxAhxdzHDVdWdV9+c+BWIkFMQr9U/ISFkU7nObukLf50gnaFLr4RHmuvHoErFg==",
   "success": true,
   "projectFilePath": "/Users/inderpalsingh/Develop/CSCI 152/Team1/Bulldog.csproj",
   "expectedPackageFiles": [
     "/Users/inderpalsingh/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/microsoft.dotnet.platformabstractions/3.1.6/microsoft.dotnet.platformabstractions.3.1.6.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/microsoft.extensions.dependencymodel/3.1.1/microsoft.extensions.dependencymodel.3.1.1.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.2/microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.core/2.12.0/silk.net.core.2.12.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.maths/2.12.0/silk.net.maths.2.12.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.opengl/2.12.0/silk.net.opengl.2.12.0.nupkg.sha512",

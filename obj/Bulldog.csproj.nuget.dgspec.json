@@ -17,14 +17,14 @@
           "/Users/inderpalsingh/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
-          "net6.0"
+          "net6.0.0"
         ],
         "sources": {
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
-            "targetAlias": "net6.0",
+            "targetAlias": "net6.0.0",
             "projectReferences": {}
           }
         },
@@ -36,8 +36,14 @@
       },
       "frameworks": {
         "net6.0": {
-          "targetAlias": "net6.0",
+          "targetAlias": "net6.0.0",
           "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.2, )",
+              "autoReferenced": true
+            },
             "Silk.NET.OpenGL": {
               "target": "Package",
               "version": "[2.12.0, )"
