@@ -1,19 +1,26 @@
 {
   "version": 2,
-  "dgSpecHash": "V54aEtlYYIp2q0gWXkaUk35zLStVzjBySfoyilFYE4Xw1s1BkVpv+orvUEv4zReI2C0l5BXhn9UAAimOs4T9VA==",
+  "dgSpecHash": "r+QOPYe9bFL1bvoRBZKNeWagwE0Hjm9wxC7VPk/KyI6TJomRO5o23TrjJW3hWCP/LVekCzyGyV3Tp5tLm27Hbg==",
   "success": true,
   "projectFilePath": "/Users/inderpalsingh/Develop/CSCI 152/Team1/Bulldog.csproj",
   "expectedPackageFiles": [
+    "/Users/inderpalsingh/.nuget/packages/microsoft.bcl.hashcode/1.1.0/microsoft.bcl.hashcode.1.1.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/microsoft.dotnet.platformabstractions/3.1.6/microsoft.dotnet.platformabstractions.3.1.6.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/microsoft.extensions.dependencymodel/3.1.1/microsoft.extensions.dependencymodel.3.1.1.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/microsoft.netframework.referenceassemblies/1.0.2/microsoft.netframework.referenceassemblies.1.0.2.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/microsoft.netframework.referenceassemblies.net461/1.0.2/microsoft.netframework.referenceassemblies.net461.1.0.2.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/newtonsoft.json/9.0.1/newtonsoft.json.9.0.1.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.core/2.12.0/silk.net.core.2.12.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.maths/2.12.0/silk.net.maths.2.12.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.opengl/2.12.0/silk.net.opengl.2.12.0.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/system.buffers/4.5.1/system.buffers.4.5.1.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/system.memory/4.5.4/system.memory.4.5.4.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512",
-    "/Users/inderpalsingh/.nuget/packages/system.runtime.compilerservices.unsafe/4.7.0/system.runtime.compilerservices.unsafe.4.7.0.nupkg.sha512",
-    "/Users/inderpalsingh/.nuget/packages/system.text.json/4.7.0/system.text.json.4.7.0.nupkg.sha512"
+    "/Users/inderpalsingh/.nuget/packages/system.runtime.compilerservices.unsafe/4.7.1/system.runtime.compilerservices.unsafe.4.7.1.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/system.runtime.interopservices.runtimeinformation/4.0.0/system.runtime.interopservices.runtimeinformation.4.0.0.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/ultz.bcl.half/1.0.0/ultz.bcl.half.1.0.0.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/ultz.bcl.half.fallback/1.0.0/ultz.bcl.half.fallback.1.0.0.nupkg.sha512"
   ],
   "logs": []
 }

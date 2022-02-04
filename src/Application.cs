@@ -30,6 +30,7 @@ namespace Bulldog
 
             while (Running)
             {
+                GameTime.Tick();
                 Update();
                 SDL.SDL_PollEvent(out e);
                 Render();
@@ -37,6 +38,7 @@ namespace Bulldog
             DisplayManger.DestroyWindow();
         }
         protected abstract void Initialize();
+        
         protected abstract void LoadContent();
 
         protected abstract void Update();
