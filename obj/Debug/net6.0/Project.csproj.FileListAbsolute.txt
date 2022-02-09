@@ -1,0 +1,15 @@
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.csproj.AssemblyReference.cache
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.GeneratedMSBuildEditorConfig.editorconfig
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.AssemblyInfoInputs.cache
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.AssemblyInfo.cs
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.csproj.CoreCompileInputs.cache
+/Users/inderpalsingh/Develop/CSCI 152/Team1/bin/Debug/net6.0/Project
+/Users/inderpalsingh/Develop/CSCI 152/Team1/bin/Debug/net6.0/Project.deps.json
+/Users/inderpalsingh/Develop/CSCI 152/Team1/bin/Debug/net6.0/Project.runtimeconfig.json
+/Users/inderpalsingh/Develop/CSCI 152/Team1/bin/Debug/net6.0/Project.dll
+/Users/inderpalsingh/Develop/CSCI 152/Team1/bin/Debug/net6.0/ref/Project.dll
+/Users/inderpalsingh/Develop/CSCI 152/Team1/bin/Debug/net6.0/Project.pdb
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.dll
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/ref/Project.dll
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.pdb
+/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/Debug/net6.0/Project.genruntimeconfig.cache

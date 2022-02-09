@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Bulldog/1.0.0": {
+        "dependencies": {
+          "OpenGL.Net": "0.8.4"
+        },
+        "runtime": {
+          "Bulldog.dll": {}
+        }
+      },
+      "OpenGL.Net/0.8.4": {
+        "runtime": {
+          "lib/net461/OpenGL.Net.dll": {
+            "assemblyVersion": "0.8.4.0",
+            "fileVersion": "0.8.4.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Bulldog/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "OpenGL.Net/0.8.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-F7o2KkIrz9rrtBY7+VRgPKnf2mV8pt3h4/o/CWPt86oIocjzKTQFNo2qH4zVYSWyy/T9rS0xBpu9t75MS6wM8Q==",
+      "path": "opengl.net/0.8.4",
+      "hashPath": "opengl.net.0.8.4.nupkg.sha512"
+    }
+  }
+}
