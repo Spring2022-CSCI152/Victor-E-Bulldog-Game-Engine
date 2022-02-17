@@ -1,7 +1,6 @@
 using Silk.NET.OpenGL;
-using System;
 
-namespace Bulldog
+namespace Bulldog.Renderer
 {
     public class VertexArrayObject<TVertexType, TIndexType> : IDisposable
         where TVertexType : unmanaged

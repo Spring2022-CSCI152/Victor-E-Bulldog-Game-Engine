@@ -2,7 +2,7 @@ using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
-namespace Bulldog
+namespace Bulldog.Core
 {
     class Program
     {

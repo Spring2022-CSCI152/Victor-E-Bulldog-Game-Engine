@@ -1,8 +1,6 @@
-using System;
-using System.IO;
 using Silk.NET.OpenGL;
 
-namespace Bulldog
+namespace Bulldog.Renderer
 {
     public class Shader : IDisposable
     {

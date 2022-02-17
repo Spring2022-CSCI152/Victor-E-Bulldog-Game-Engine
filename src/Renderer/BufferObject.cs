@@ -1,7 +1,6 @@
 using Silk.NET.OpenGL;
-using System;
 
-namespace Bulldog;
+namespace Bulldog.Renderer;
 
     public class BufferObject<TDataType> : IDisposable
         where TDataType : unmanaged
