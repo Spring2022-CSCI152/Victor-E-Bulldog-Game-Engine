@@ -1,10 +1,11 @@
+using Bulldog.Renderer;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
-using Bulldog.Renderer.Shaders;
 using Bulldog.Scene;
+using Shader = Bulldog.Renderer.Shader;
 
 namespace Bulldog.Core
 {
@@ -13,10 +14,13 @@ namespace Bulldog.Core
         private static IWindow _window;
         private static GL _gl;
 
-        private static uint _vbo;
-        private static uint _ebo;
-        private static uint _vao;
-        private static uint _shader;
+        private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader.vert";
+        private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader.frag";
+
+        private static BufferObject<float> _vbo;
+        private static BufferObject<uint> _ebo;
+        private static VertexArrayObject<float, uint> _vao;
+        private static Shader _shader;
 
         private static void Main()
         {
@@ -37,7 +41,9 @@ namespace Bulldog.Core
         }
 
 
-        private static unsafe void OnLoad()
+        
+        
+        private static void OnLoad()
         {
             //Set-up input context.
             IInputContext input = _window.CreateInput();
@@ -45,81 +51,32 @@ namespace Bulldog.Core
             {
                 input.Keyboards[i].KeyDown += KeyDown;
             }
-
-
-
             
             //Getting the opengl api for drawing to the screen.
             _gl = GL.GetApi(_window);
             
-            //Creating a vertex array.
+            //Creating buffers
             Console.WriteLine("Creating buffers...");
-            _vao = _gl.GenVertexArray();
-            _gl.BindVertexArray(_vao);
-
             //Initializing a vertex buffer that holds the vertex data.
-            _vbo = _gl.GenBuffer(); //Creating the buffer.
-            _gl.BindBuffer(BufferTargetARB.ArrayBuffer, _vbo); //Binding the buffer.
-            fixed (void* v = &TestQuad.Vertices[0])
-            {
-                _gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint) (TestQuad.Vertices.Length * sizeof(uint)), v, BufferUsageARB.StaticDraw); //Setting buffer data.
-            }
-
+            _vbo = new BufferObject<float>(_gl, TestQuad.Vertices, BufferTargetARB.ArrayBuffer);
             //Initializing a element buffer that holds the index data.
-            _ebo = _gl.GenBuffer(); //Creating the buffer.
-            _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, _ebo); //Binding the buffer.
-            fixed (void* i = &TestQuad.Indices[0])
-            {
-                _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint) (TestQuad.Indices.Length * sizeof(uint)), i, BufferUsageARB.StaticDraw); //Setting buffer data.
-            }
+            _ebo = new BufferObject<uint>(_gl, TestQuad.Indices, BufferTargetARB.ElementArrayBuffer);
+            //Creating a vertex array.
+            _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
+            //Telling the VAO object how to lay out the attribute pointers
+            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 7, 0);
+            _vao.VertexAttributePointer(1, 4, VertexAttribPointerType.Float, 7, 3);
             Console.WriteLine("Buffers done.");
-
-            //Creating a vertex shader.
+            
+            //Creating a shader.
             Console.WriteLine("Compiling shaders...");
-            uint vertexShader = _gl.CreateShader(ShaderType.VertexShader);
-            _gl.ShaderSource(vertexShader, VertexShader.VertexShaderSource);
-            _gl.CompileShader(vertexShader);
-
-            //Checking the shader for compilation errors.
-            string infoLog = _gl.GetShaderInfoLog(vertexShader);
-            if (!string.IsNullOrWhiteSpace(infoLog))
-            {
-                Console.WriteLine($"Error compiling vertex shader {infoLog}");
-            }
-
-            //Creating a fragment shader.
-            uint fragmentShader = _gl.CreateShader(ShaderType.FragmentShader);
-            _gl.ShaderSource(fragmentShader, FragmentShader.FragmentShaderSource);
-            _gl.CompileShader(fragmentShader);
-
-            //Checking the shader for compilation errors.
-            infoLog = _gl.GetShaderInfoLog(fragmentShader);
-            if (!string.IsNullOrWhiteSpace(infoLog))
-            {
-                Console.WriteLine($"Error compiling fragment shader {infoLog}");
-            }
-
-            //Combining the shaders under one shader program.
-            _shader = _gl.CreateProgram();
-            _gl.AttachShader(_shader, vertexShader);
-            _gl.AttachShader(_shader, fragmentShader);
-            _gl.LinkProgram(_shader);
-
-            //Checking the linking for errors.
-            _gl.GetProgram(_shader, GLEnum.LinkStatus, out var status);
-            Console.WriteLine(status == 0 ? $"Error linking shader {_gl.GetProgramInfoLog(_shader)}" : "Shaders done.");
-
-            //Delete the no longer useful individual shaders;
-            _gl.DetachShader(_shader, vertexShader);
-            _gl.DetachShader(_shader, fragmentShader);
-            _gl.DeleteShader(vertexShader);
-            _gl.DeleteShader(fragmentShader);
-
-            //Tell opengl how to give the data to the shaders.
-            _gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), null);
-            _gl.EnableVertexAttribArray(0);
+            _shader = new Shader(_gl, VertShaderSourcePath, FragShaderSourcePath);
+            Console.WriteLine("Shaders Done.");
         }
 
+        
+        
+        
         private static unsafe void OnRender(double obj)
         {
             //Here all rendering should be done.
@@ -127,18 +84,27 @@ namespace Bulldog.Core
             _gl.Clear((uint) ClearBufferMask.ColorBufferBit);
 
             //Bind the geometry and shader.
-            _gl.BindVertexArray(_vao);
-            _gl.UseProgram(_shader);
+            _vao.Bind();
+            _shader.Use();
+            
+            //Setting a uniform.
+            _shader.SetUniform("uBlue", (float) Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
 
             //Draw the geometry.
             _gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
         }
 
+        
+        
+        
         private static void OnUpdate(double obj)
         {
             //Here all updates to the program should be done.
         }
 
+        
+        
+        
         private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
         {
             //Check to close the window on escape.
