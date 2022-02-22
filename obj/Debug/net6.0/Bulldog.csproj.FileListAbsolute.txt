@@ -78,3 +78,4 @@ C:\Users\harpi\RiderProjects\Team1\obj\Debug\net6.0\refint\Bulldog.dll
 C:\Users\harpi\RiderProjects\Team1\obj\Debug\net6.0\Bulldog.pdb
 C:\Users\harpi\RiderProjects\Team1\obj\Debug\net6.0\Bulldog.genruntimeconfig.cache
 C:\Users\harpi\RiderProjects\Team1\obj\Debug\net6.0\ref\Bulldog.dll
+C:\Users\harpi\RiderProjects\Team1\bin\Debug\net6.0\SixLabors.ImageSharp.dll

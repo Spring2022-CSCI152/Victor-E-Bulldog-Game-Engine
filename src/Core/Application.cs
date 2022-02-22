@@ -6,6 +6,7 @@ using Silk.NET.Windowing;
 
 using Bulldog.Scene;
 using Shader = Bulldog.Renderer.Shader;
+using Texture = Bulldog.Renderer.Texture;
 
 namespace Bulldog.Core
 {
@@ -16,11 +17,14 @@ namespace Bulldog.Core
 
         private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader.frag";
+        private const string TexturePath = "../../../src/Scene/TestTexture.jpg";
 
         private static BufferObject<float> _vbo;
         private static BufferObject<uint> _ebo;
         private static VertexArrayObject<float, uint> _vao;
         private static Shader _shader;
+        //Create a texture object
+        private static Texture _texture;
 
         private static void Main()
         {
@@ -64,14 +68,17 @@ namespace Bulldog.Core
             //Creating a vertex array.
             _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
             //Telling the VAO object how to lay out the attribute pointers
-            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 7, 0);
-            _vao.VertexAttributePointer(1, 4, VertexAttribPointerType.Float, 7, 3);
+            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
+            _vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
             Console.WriteLine("Buffers done.");
             
             //Creating a shader.
             Console.WriteLine("Compiling shaders...");
             _shader = new Shader(_gl, VertShaderSourcePath, FragShaderSourcePath);
             Console.WriteLine("Shaders Done.");
+            
+            //Load texture
+            _texture = new Texture(_gl, TexturePath);
         }
 
         
@@ -88,7 +95,9 @@ namespace Bulldog.Core
             _shader.Use();
             
             //Setting a uniform.
-            _shader.SetUniform("uBlue", (float) Math.Sin(DateTime.Now.Millisecond / 1000f * Math.PI));
+            //Bind a texture and and set the uTexture0 to use texture0.
+            _texture.Bind(TextureUnit.Texture0);
+            _shader.SetUniform("uTexture0", 0);
 
             //Draw the geometry.
             _gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "143lxszrhI/mi/G7bvTc8CZnXpqIM5fdQ5bjchY/dYavtv0Z1FXTz8Z+8EDATcinm8AVcAIHA/OS2SVguaMHLw==",
+  "dgSpecHash": "3iiT3zTZIhMRBG+zXyZJFmi1YptSaRxAKXJIGROIqfoizIbclnSTC68xdW0CgA9uEUd4/2xacy0jbqcgkvqFOQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\harpi\\RiderProjects\\Team1\\Bulldog.csproj",
   "expectedPackageFiles": [
@@ -25,6 +25,7 @@
     "C:\\Users\\harpi\\.nuget\\packages\\silk.net.windowing.common\\2.13.0\\silk.net.windowing.common.2.13.0.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\silk.net.windowing.glfw\\2.13.0\\silk.net.windowing.glfw.2.13.0.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\silk.net.windowing.sdl\\2.13.0\\silk.net.windowing.sdl.2.13.0.nupkg.sha512",
+    "C:\\Users\\harpi\\.nuget\\packages\\sixlabors.imagesharp\\1.0.4\\sixlabors.imagesharp.1.0.4.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
