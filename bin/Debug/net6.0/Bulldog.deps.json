@@ -10,7 +10,8 @@
         "dependencies": {
           "Microsoft.NETFramework.ReferenceAssemblies": "1.0.2",
           "Silk.NET": "2.13.0",
-          "Silk.NET.Core": "2.13.0"
+          "Silk.NET.Core": "2.13.0",
+          "SixLabors.ImageSharp": "1.0.4"
         },
         "runtime": {
           "Bulldog.dll": {}
@@ -227,6 +228,14 @@
           }
         }
       },
+      "SixLabors.ImageSharp/1.0.4": {
+        "runtime": {
+          "lib/netcoreapp3.1/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.4.0"
+          }
+        }
+      },
       "System.Buffers/4.5.1": {},
       "System.Memory/4.5.4": {},
       "System.Numerics.Vectors/4.5.0": {},
@@ -275,7 +284,7 @@
           "runtimes/win-x64/native/SDL2.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "2.0.14.0"
           }
         }
       }
@@ -433,6 +442,13 @@
       "sha512": "sha512-S1lE9dgy0Iae2paj4IA2F5jP8ofpGsmc6aDR1CaV0SApuQb3btxPTsZrk261eI0FTfkZktBzaFL7cQeFHex6YQ==",
       "path": "silk.net.windowing.sdl/2.13.0",
       "hashPath": "silk.net.windowing.sdl.2.13.0.nupkg.sha512"
+    },
+    "SixLabors.ImageSharp/1.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-H2rPiEr2ddBOltOuqRYhpLBAsQXDAhbzMMhhuksnBG2oefup1MXMchALe7yYkKJksNbtxbZHKeM6dn/68I75qw==",
+      "path": "sixlabors.imagesharp/1.0.4",
+      "hashPath": "sixlabors.imagesharp.1.0.4.nupkg.sha512"
     },
     "System.Buffers/4.5.1": {
       "type": "package",
