@@ -37,9 +37,9 @@ namespace Bulldog.Core
             }
         }
 
-        private static void OnRender(double obj)
+        private static void OnRender(double obj)  //draw each frame
         {
-            //Here all rendering should be done.
+            //Here all rendering should be done. 
         }
 
         private static void OnUpdate(double obj)

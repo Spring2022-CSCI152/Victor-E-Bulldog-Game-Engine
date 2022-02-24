@@ -979,19 +979,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/inderpalsingh/.nuget/packages/": {}
+    "C:\\Users\\salam\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/inderpalsingh/Develop/CSCI 152/Team1/Bulldog.csproj",
+      "projectUniqueName": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
       "projectName": "Bulldog",
-      "projectPath": "/Users/inderpalsingh/Develop/CSCI 152/Team1/Bulldog.csproj",
-      "packagesPath": "/Users/inderpalsingh/.nuget/packages/",
-      "outputPath": "/Users/inderpalsingh/Develop/CSCI 152/Team1/obj/",
+      "projectPath": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
+      "packagesPath": "C:\\Users\\salam\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\salam\\RiderProjects\\Team1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/inderpalsingh/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\salam\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -1045,7 +1045,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/inderpalsingh/.dotnet/sdk/6.0.101/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
