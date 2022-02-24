@@ -3,6 +3,7 @@ namespace Bulldog.ECS;
 
 public class Entity
 {
+
     private Guid Id { get; }
     public List<Component> ComponentPool { get; }
 

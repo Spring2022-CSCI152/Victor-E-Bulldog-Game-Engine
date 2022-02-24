@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Bulldog.ECS;
 using Silk.NET.Core;
 using Silk.NET.OpenGL;
 using Silk.NET.Input;
@@ -8,11 +9,17 @@ using Silk.NET.Maths;
 namespace Bulldog.Renderer;
 
 
-public static class ObjRenderer
+public class ObjRenderer
 {
-    static ObjRenderer(list<Entity> entities)
+    public ObjRenderer()
     {
+        /*
+        Entity ws = entities.Find(WorldScene);
+        Entity 
+        Component thisMesh = var.GetComponent<Component>(mesh);
+        */
         //store mesh, texture, and translation data internally
+       
     }
     public static void Init()
     {
