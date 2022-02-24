@@ -12,9 +12,4 @@
       <PackageReference Include="Silk.NET.Core" Version="2.13.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="src\Utils" />
-      <Folder Include="src\Scene" />
-    </ItemGroup>
-
 </Project>
