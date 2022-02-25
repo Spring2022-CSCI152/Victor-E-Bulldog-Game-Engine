@@ -39,47 +39,47 @@ namespace Bulldog.Core
         private static readonly float[] Vertices =
         {
             //X    Y      Z     U   V
-            -0.5f, -0.5f, -0.5f,  
-            0.5f, -0.5f, -0.5f,  
-            0.5f,  0.5f, -0.5f, 
-            0.5f,  0.5f, -0.5f, 
-            -0.5f,  0.5f, -0.5f, 
-            -0.5f, -0.5f, -0.5f,  
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
 
-            -0.5f, -0.5f,  0.5f,  
-            0.5f, -0.5f,  0.5f,  
-            0.5f,  0.5f,  0.5f,  
-            0.5f,  0.5f,  0.5f,  
-            -0.5f,  0.5f,  0.5f,  
-            -0.5f, -0.5f,  0.5f,  
+            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
 
-            -0.5f,  0.5f,  0.5f,  
-            -0.5f,  0.5f, -0.5f,  
-            -0.5f, -0.5f, -0.5f,  
-            -0.5f, -0.5f, -0.5f,  
-            -0.5f, -0.5f,  0.5f,  
-            -0.5f,  0.5f,  0.5f,  
+            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
 
-            0.5f,  0.5f,  0.5f,  
-            0.5f,  0.5f, -0.5f,  
-            0.5f, -0.5f, -0.5f, 
-            0.5f, -0.5f, -0.5f, 
-            0.5f, -0.5f,  0.5f,  
-            0.5f,  0.5f,  0.5f,  
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
 
-            -0.5f, -0.5f, -0.5f, 
-            0.5f, -0.5f, -0.5f, 
-            0.5f, -0.5f,  0.5f,  
-            0.5f, -0.5f,  0.5f,  
-            -0.5f, -0.5f,  0.5f,  
-            -0.5f, -0.5f, -0.5f,  
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-            -0.5f,  0.5f, -0.5f,  
-            0.5f,  0.5f, -0.5f,  
-            0.5f,  0.5f,  0.5f,  
-            0.5f,  0.5f,  0.5f,  
-            -0.5f,  0.5f,  0.5f,  
-            -0.5f,  0.5f, -0.5f,  
+            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f  
         };
         private static readonly uint[] Indices =
         {
@@ -120,6 +120,10 @@ namespace Bulldog.Core
             Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
             Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
             
+            Shader = new Shader(Gl, "shader.vert", "shader.frag");
+
+            Texture = new Texture(Gl, "silk.png");
+            
         }
 
         private static void OnRender(double obj)  //draw each frame
@@ -127,6 +131,9 @@ namespace Bulldog.Core
             Gl.Enable(EnableCap.DepthTest);
             Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
             Vao.Bind();
+            Texture.Bind();
+            Shader.Use();
+            Shader.SetUniform("uTexture0", 0);
           
 
             //Use elapsed time to convert to radians to allow our cube to rotate over time
@@ -136,7 +143,9 @@ namespace Bulldog.Core
             var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
             var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 100.0f);
 
-          
+            Shader.SetUniform("uModel", model);
+            Shader.SetUniform("uView", view);
+            Shader.SetUniform("uProjection", projection);
 
             //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
             Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
