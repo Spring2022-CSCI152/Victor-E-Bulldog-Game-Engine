@@ -3,18 +3,19 @@ namespace Bulldog.ECS;
 
 public class Entity
 {
-    private Guid Id { get; }
-    public List<Component> ComponentPool { get; }
+    private Guid Id { get; set; }
+    private List<Component> _componentPool;
 
-    public void AddComponent(Component component)
+    public void AddComponent( Component component)
     {
-        ComponentPool.Add(component);
-        component.EntityId = this;
+        component.EntityId = this.Id;
     }
+    
     public T GetComponent<T>() where T : Component
     {
-        return ComponentPool.Where(component => component.GetType().Equals(typeof(T))).Cast<T>().FirstOrDefault();
+        return _componentPool.Where(component => component.GetType() == typeof(T)).Cast<T>().FirstOrDefault();
     }
-
+    public void Delete(){}
+    
     
 }
