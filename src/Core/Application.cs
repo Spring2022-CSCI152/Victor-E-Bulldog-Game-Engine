@@ -5,6 +5,7 @@ using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
 using Bulldog.Scene;
+using Bulldog.Utils;
 using Shader = Bulldog.Renderer.Shader;
 using Texture = Bulldog.Renderer.Texture;
 
@@ -79,6 +80,9 @@ namespace Bulldog.Core
             
             //Load texture
             _texture = new Texture(_gl, TexturePath);
+            
+            // try loading
+            ObjLoader myObj = new ObjLoader();
         }
 
         
