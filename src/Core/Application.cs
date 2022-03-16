@@ -19,6 +19,7 @@ namespace Bulldog.Core
         private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader2.vert";
         private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader2.frag";
         private const string TexturePath = "../../../src/Scene/TestTexture.jpg";
+        private const string objPath = "../../../src/Scene/suzanne.obj";
 
         private static BufferObject<float> _vbo;
         private static BufferObject<uint> _ebo;
@@ -85,11 +86,11 @@ namespace Bulldog.Core
             
             // try loading
             // load obj
-            _myObj = new ObjLoader();
+            _myObj = new ObjLoader(objPath);
             // create buffers
             Console.WriteLine("Creating buffers...");
-            _vbo = new BufferObject<float>(_gl, _myObj.verticies, BufferTargetARB.ArrayBuffer);
-            _ebo = new BufferObject<uint>(_gl, _myObj.indicies, BufferTargetARB.ElementArrayBuffer);
+            _vbo = new BufferObject<float>(_gl, _myObj._verticies, BufferTargetARB.ArrayBuffer);
+            _ebo = new BufferObject<uint>(_gl, _myObj._indicies, BufferTargetARB.ElementArrayBuffer);
             _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
             _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 3, 0);
             Console.WriteLine("Buffers done.");
@@ -117,7 +118,7 @@ namespace Bulldog.Core
 
             //Draw the geometry.
             //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
-            _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.indicies.Length, DrawElementsType.UnsignedInt, null);
+            _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj._indicies.Length, DrawElementsType.UnsignedInt, null);
         }
 
         
