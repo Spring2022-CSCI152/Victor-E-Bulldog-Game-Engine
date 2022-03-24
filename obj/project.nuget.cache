@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CXovASvsiyiIhNCaEY8OaAQ9GXwxOwz38HZwOs2FFffaXZTp0Vjm3u6tSlxhAT3iAqO9jEs0mqP7SLJexplXGw==",
+  "dgSpecHash": "khER+mLcTvCF7El7Zfb2LqOS+Uo8RKCdTecWrdknZ46vX0e0gxHTZk4zyZJoQGVlYS30j4ecQVpiW/3yqpnXmQ==",
   "success": true,
   "projectFilePath": "/Users/inderpalsingh/Develop/CSCI 152/Team1/Bulldog.csproj",
   "expectedPackageFiles": [
@@ -25,6 +25,8 @@
     "/Users/inderpalsingh/.nuget/packages/silk.net.windowing.common/2.13.0/silk.net.windowing.common.2.13.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.windowing.glfw/2.13.0/silk.net.windowing.glfw.2.13.0.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/silk.net.windowing.sdl/2.13.0/silk.net.windowing.sdl.2.13.0.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/sixlabors.core/1.0.0-beta0008/sixlabors.core.1.0.0-beta0008.nupkg.sha512",
+    "/Users/inderpalsingh/.nuget/packages/sixlabors.imagesharp/1.0.4/sixlabors.imagesharp.1.0.4.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/system.buffers/4.5.1/system.buffers.4.5.1.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/system.memory/4.5.4/system.memory.4.5.4.nupkg.sha512",
     "/Users/inderpalsingh/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512",

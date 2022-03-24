@@ -1,20 +1,34 @@
-namespace Bulldog.ECS.Systems;
-
-public class BaseSystem<T> where T : Component
+namespace Bulldog.ECS.Systems
 {
-    public static List<T> Components = new List<T>();
+    public abstract class BaseSystem : ECSObject {
+        private readonly string[] RequireComponentNames;
+        protected Entity CurrentEntity { get; private set; }
 
-    public static void Register(T component)
-    {
-        Components.Add(component);
-    }
+        public BaseSystem(params string[] requireComponentNames) {
+            RequireComponentNames = requireComponentNames;
+        }
 
-    public static void Update(float deltaTime)
-    {
-        foreach ( T component in Components)
-        {
-            component.Update(deltaTime);
+        protected T Get<T>() where T : Component {
+            return CurrentEntity.GetComponent<T>();
+        }
+
+        public bool Match(Entity entity) {
+            if(RequireComponentNames.Length < 1)
+                return false;
+            foreach(string s in RequireComponentNames) {
+                if(!entity.HasComponent(s)) return false;
+            }
+
+            CurrentEntity = entity;
+            return true;
+        }
+
+        public virtual void Init() { }
+        public virtual void Update(float dt) { }
+        public virtual void Draw() { }
+
+        public override string ToString() {
+            return string.Format("System<{0}:{1}>", Name, UID);
         }
     }
-    
 }

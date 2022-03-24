@@ -51,6 +51,14 @@
             "Silk.NET.Core": {
               "target": "Package",
               "version": "[2.13.0, )"
+            },
+            "SixLabors.Core": {
+              "target": "Package",
+              "version": "[1.0.0-beta0008, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[1.0.4, )"
             }
           },
           "imports": [
