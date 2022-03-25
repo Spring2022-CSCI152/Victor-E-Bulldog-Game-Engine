@@ -1,9 +1,14 @@
-using System.Data;
-
-namespace Bulldog.ECS;
-
-public class Component
+namespace Bulldog.ECS
 {
-    public Guid EntityId { get; set; }
-    public virtual void Update(float deltaTime){}
+    public abstract class Component : ECSObject
+    {
+        public new string Name { get => base.Name; }
+
+        public Component() { }
+
+        public override string ToString()
+        {
+            return string.Format("Component<{0}:{1}>", Name, UID);
+        }
+    }
 }
