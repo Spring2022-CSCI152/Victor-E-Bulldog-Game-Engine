@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Cio4xzX5oOPLcsBfIN3wFGRMD4ZIWIB2v/BfhjdMISt+Hg+w/yoqEpxV0/TBh+G0Umc63+EnB/6+J3wbJphBfw==",
+  "dgSpecHash": "9g4dYLcdXD4gD4O5yFhklX4aQD/z1XywC1ItrJd1UDhavDdbJ2x7AkaU1nAf73p9xQhQ1NJRagY49EC7q9/G+Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
   "expectedPackageFiles": [
@@ -25,6 +25,7 @@
     "C:\\Users\\salam\\.nuget\\packages\\silk.net.windowing.common\\2.13.0\\silk.net.windowing.common.2.13.0.nupkg.sha512",
     "C:\\Users\\salam\\.nuget\\packages\\silk.net.windowing.glfw\\2.13.0\\silk.net.windowing.glfw.2.13.0.nupkg.sha512",
     "C:\\Users\\salam\\.nuget\\packages\\silk.net.windowing.sdl\\2.13.0\\silk.net.windowing.sdl.2.13.0.nupkg.sha512",
+    "C:\\Users\\salam\\.nuget\\packages\\sixlabors.imagesharp\\1.0.4\\sixlabors.imagesharp.1.0.4.nupkg.sha512",
     "C:\\Users\\salam\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\salam\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
     "C:\\Users\\salam\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",

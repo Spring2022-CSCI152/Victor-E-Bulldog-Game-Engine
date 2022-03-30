@@ -1,9 +1,9 @@
 namespace Bulldog.ECS;
-public static class World
+public class World
 {
-    private static readonly List<Entity> Entities = new();
+    public List <Entity> Entities = new();
 
-    public static void Register(Entity entity)
+    public void Register(Entity entity)
     {
         Entities.Add(entity);
     }
