@@ -26,13 +26,13 @@ namespace Bulldog.Utils
         // ctor
         public unsafe ObjLoader(/*GL gl, */string path)
         {
-            
-            
             var importer = new AssimpContext();
             importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
             
             try
             {
+                // TODO: get max/min of x,y,z verts as model is being loaded in
+                
                 // load model
                 _model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
                 string result = _model != null ? "Model Loaded." : "ERROR";
@@ -48,14 +48,28 @@ namespace Bulldog.Utils
                         tempvert.Add(vtx.Y);
                         tempvert.Add(vtx.Z);
                     }
+                    // TODO: insert aabb bounds here
                     // convert list to array
                     _verticies = tempvert.ToArray();
+                    // dispose of temporary list
+                    tempvert = null;
                 }
                 
                 // get array of UVs
                 if (_model.Meshes[0].HasTextureCoords(0))
                 {
-                    //_model.Meshes[0].TextureCoordinateChannels[0].
+                    // build a list of the model's UVs
+                    List<float> tempuv = new List<float>();
+                    foreach (var vtx in _model.Meshes[0].TextureCoordinateChannels[0])
+                    {
+                        tempuv.Add(vtx.X);
+                        tempuv.Add(vtx.Y);
+                        tempuv.Add(vtx.Z);
+                    }
+                    // convert list to array
+                    _uvs = tempuv.ToArray();
+                    // dispose of temporary list
+                    tempuv = null;
                 }
                 
                 //  build a list of the model's normals
@@ -70,11 +84,15 @@ namespace Bulldog.Utils
                     }
                     // convert list to array
                     _normals = tempnorm.ToArray();
+                    // dispose of temporary list
+                    tempnorm = null;
                 }
                 
                 // get array of indicies
                 _indicies = _model.Meshes[0].GetUnsignedIndices();
             }
+            
+            // catch exception on model load failure
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
