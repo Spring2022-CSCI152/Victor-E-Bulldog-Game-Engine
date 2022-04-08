@@ -16,10 +16,10 @@ namespace Bulldog.Core
         private static IWindow _window;
         private static GL _gl;
 
-        private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader2.vert";
-        private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader2.frag";
+        private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader.vert";
+        private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader.frag";
         private const string TexturePath = "../../../src/Scene/TestTexture.jpg";
-        private const string objPath = "../../../src/Scene/suzanne.obj";
+        private const string ObjPath = "../../../src/Scene/suzanne.obj";
 
         private static BufferObject<float> _vbo;
         private static BufferObject<uint> _ebo;
@@ -86,13 +86,16 @@ namespace Bulldog.Core
             
             // try loading
             // load obj
-            _myObj = new ObjLoader(objPath);
+            _myObj = new ObjLoader(ObjPath);
             // create buffers
             Console.WriteLine("Creating buffers...");
             _vbo = new BufferObject<float>(_gl, _myObj._verticies, BufferTargetARB.ArrayBuffer);
+            //BufferObject<float> uvVbo = new BufferObject<float>(_gl, _myObj._uvs, BufferTargetARB.ArrayBuffer);
+            // CopyBufferSubDataTarget.TextureBuffer
             _ebo = new BufferObject<uint>(_gl, _myObj._indicies, BufferTargetARB.ElementArrayBuffer);
             _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
             _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 3, 0);
+            _vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 3, sizeof(_vbo));
             Console.WriteLine("Buffers done.");
         }
 
