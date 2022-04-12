@@ -11,6 +11,7 @@
           "Microsoft.NETFramework.ReferenceAssemblies": "1.0.2",
           "Silk.NET": "2.13.0",
           "Silk.NET.Core": "2.13.0",
+          "SixLabors.Core": "1.0.0-beta0008",
           "SixLabors.ImageSharp": "1.0.4"
         },
         "runtime": {
@@ -228,6 +229,17 @@
           }
         }
       },
+      "SixLabors.Core/1.0.0-beta0008": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/SixLabors.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "SixLabors.ImageSharp/1.0.4": {
         "runtime": {
           "lib/netcoreapp3.1/SixLabors.ImageSharp.dll": {
@@ -284,7 +296,7 @@
           "runtimes/win-x64/native/SDL2.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "2.0.14.0"
+            "fileVersion": "0.0.0.0"
           }
         }
       }
@@ -442,6 +454,13 @@
       "sha512": "sha512-S1lE9dgy0Iae2paj4IA2F5jP8ofpGsmc6aDR1CaV0SApuQb3btxPTsZrk261eI0FTfkZktBzaFL7cQeFHex6YQ==",
       "path": "silk.net.windowing.sdl/2.13.0",
       "hashPath": "silk.net.windowing.sdl.2.13.0.nupkg.sha512"
+    },
+    "SixLabors.Core/1.0.0-beta0008": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rrKPDN107tVOh+mUoNh+kHELa7WfYZREPPbYdiKJ3Rd6dex/UgDWDGBOjPJn4BBhmts/VGuaXMXyfT/BwiuH2g==",
+      "path": "sixlabors.core/1.0.0-beta0008",
+      "hashPath": "sixlabors.core.1.0.0-beta0008.nupkg.sha512"
     },
     "SixLabors.ImageSharp/1.0.4": {
       "type": "package",
