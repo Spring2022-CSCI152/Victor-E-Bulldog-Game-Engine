@@ -18,4 +18,10 @@
       <Folder Include="src\Renderer\Shaders" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="obj\Debug\net6.0\shader.frag" />
+      <None Include="obj\Debug\net6.0\shader.vert" />
+      <None Include="obj\Debug\net6.0\silk.png" />
+    </ItemGroup>
+
 </Project>

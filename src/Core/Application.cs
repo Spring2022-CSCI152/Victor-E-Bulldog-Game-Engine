@@ -1,37 +1,85 @@
 using Silk.NET.Input;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
-using System.Drawing;
 using System.Numerics;
+using Silk.NET.Maths;
 using Bulldog.Renderer;
 using Bulldog.Utils;
-using Silk.NET.Maths;
 using Shader = Bulldog.Renderer.Shader;
 using Texture = Bulldog.Renderer.Texture;
-
 
 namespace Bulldog.Core
 {
     class Program
     {
+        // ReSharper disable once InconsistentNaming
         private static IWindow window;
         private static GL Gl;
+
+        private const int Width = 800;
+        private const int Height = 700;
 
         private static BufferObject<float> Vbo;
         private static BufferObject<uint> Ebo;
         private static VertexArrayObject<float, uint> Vao;
         private static Texture Texture;
         private static Shader Shader;
-        //Creating transforms for the transformations
-        private static Transform[] Transforms = new Transform[4];
+        private static Shader GeometryPassShader;
+
+        //Setup the camera's location, and relative up and right directions
+        private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
+        private static Vector3 CameraTarget = Vector3.Zero;
+        private static Vector3 CameraDirection = Vector3.Normalize(CameraPosition - CameraTarget);
+        private static Vector3 CameraRight = Vector3.Normalize(Vector3.Cross(Vector3.UnitY, CameraDirection));
+        private static Vector3 CameraUp = Vector3.Cross(CameraDirection, CameraRight);
+
+        // ReSharper disable once InconsistentNaming
+
 
         private static readonly float[] Vertices =
         {
             //X    Y      Z     U   V
-             0.5f,  0.5f, 0.0f, 1f, 0f,
-             0.5f, -0.5f, 0.0f, 1f, 1f,
-            -0.5f, -0.5f, 0.0f, 0f, 1f,
-            -0.5f,  0.5f, 0.5f, 0f, 0f
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
 
         private static readonly uint[] Indices =
@@ -40,12 +88,12 @@ namespace Bulldog.Core
             1, 2, 3
         };
 
-
         private static void Main(string[] args)
         {
             var options = WindowOptions.Default;
             options.Size = new Vector2D<int>(800, 600);
-            options.Title = "LearnOpenGL with Silk.NET";
+            options.Title = "Bulldog Forward Rendered Cube Test";
+            options.PreferredDepthBufferBits = 24;
             window = Window.Create(options);
 
             window.Load += OnLoad;
@@ -54,7 +102,6 @@ namespace Bulldog.Core
 
             window.Run();
         }
-
 
         private static void OnLoad()
         {
@@ -65,6 +112,8 @@ namespace Bulldog.Core
             }
 
             Gl = GL.GetApi(window);
+            
+            GBuffer.init(Height,Width, Gl);
 
             Ebo = new BufferObject<uint>(Gl, Indices, BufferTargetARB.ElementArrayBuffer);
             Vbo = new BufferObject<float>(Gl, Vertices, BufferTargetARB.ArrayBuffer);
@@ -73,42 +122,36 @@ namespace Bulldog.Core
             Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
             Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
 
-            //Shader = new Shader(Gl, "shader.vert", "shader.frag");
+            Shader = new Shader(Gl, "shader.vert", "shader.frag");
+            //GeometryPassShader = new Shader(Gl, "GeometryPassShader.Vert", "GeometryPassShader,Frag");
 
-            //Texture = new Texture(Gl, "silk.png");
-
-            //Unlike in the transformation, because of our abstraction, order doesn't matter here.
-            //Translation.
-            Transforms[0] = new Transform();
-            Transforms[0].Position = new Vector3(0.5f, 0.5f, 0f);
-            //Rotation.
-            Transforms[1] = new Transform();
-            Transforms[1].Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 1f);
-            //Scaling.
-            Transforms[2] = new Transform();
-            Transforms[2].Scale = 0.5f;
-            //Mixed transformation.
-            Transforms[3] = new Transform();
-            Transforms[3].Position = new Vector3(-0.5f, 0.5f, 0f);
-            Transforms[3].Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, 1f);
-            Transforms[3].Scale = 0.5f;
+            Texture = new Texture(Gl, "silk.png");
         }
 
-        private static unsafe void OnRender(double obj)
+        private static void OnRender(double obj)
         {
-            Gl.Clear((uint) ClearBufferMask.ColorBufferBit);
+            // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
+            Gl.Clear((uint) (ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit));
+            
+            Vao.Bind();
+            
+            Texture.Bind();
+            
 
-            Vao.Bind(); 
-//                         Texture.Bind();
-//            Shader.SetUniform("uTexture0", 0);
-
-            for (int i = 0; i < Transforms.Length; i++)
-            {
-                //Using the transformations.
-                //Shader.SetUniform("uModel", Transforms[i].ViewMatrix);
-
-                Gl.DrawElements(PrimitiveType.Triangles, (uint) Indices.Length, DrawElementsType.UnsignedInt, null);
-            }
+            //Use elapsed time to convert to radians to allow our cube to rotate over time
+            var difference = (float) (window.Time * 100);
+            
+            Gl.BindFramebuffer(FramebufferTarget.Framebuffer, GBuffer.Handle);
+                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
+                var view = Matrix4x4.CreateLookAt(CameraPosition, CameraTarget, CameraUp);
+                // ReSharper disable once PossibleLossOfFraction
+                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), Width / Height, 0.1f, 100.0f);
+                //GeometryPassShader.Use();
+                //GeometryPassShader.SetUniform("projection", projection);
+                //GeometryPassShader.SetUniform("view", view);
+                //GeometryPassShader.SetUniform("model", model);
+                //We're drawing with just vertices and no indicies, and it takes 36 verticies to have a six-sided textured cube
+            Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
         }
 
         private static void OnClose()
