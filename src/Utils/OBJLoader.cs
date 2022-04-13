@@ -1,95 +1,61 @@
 ﻿//https://github.com/assimp/assimp-net/blob/master/AssimpNet.Sample/SimpleOpenGLSample.cs
 
-using System.Diagnostics.SymbolStore;
 using Assimp;
 using Assimp.Configs;
-using Silk.NET.OpenGL;
-using Scene = Assimp.Scene;
+// using Silk.NET.OpenGL;
+// using Scene = Assimp.Scene;
 
 namespace Bulldog.Utils
 {
     public class ObjLoader :IDisposable
     {
-        // modular variables
-        private uint _handle;
-        private GL _gl;
-        
-        // mesh container
-        private readonly Assimp.Scene _model;
-        private readonly int _texId;
-        public float[] _verticies;
-        public float[] _uvs;
-        public float[] _normals;
-        public uint[] _indicies;
+        // private readonly int _texId;
+        public readonly float[] Vertices;
+        public readonly float[] TexCoords;
+        public readonly float[] Normals;
+        public readonly uint[] Indices;
         //public readonly _vbo;
+        private Vector3D _minVertex = new Vector3D(float.MaxValue,float.MaxValue,float.MaxValue);
+        private Vector3D _maxVertex = new Vector3D(float.MinValue,float.MinValue,float.MinValue);
+        
+        
 
-        // ctor
-        public unsafe ObjLoader(/*GL gl, */string path)
+        /// <summary>
+        ///  Loads the mesh data contained in an OBJ file.
+        /// </summary>
+        /// <param name="path">Path to OBJ file</param>
+        public ObjLoader(/*GL gl, */string path)
         {
             var importer = new AssimpContext();
             importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
             
             try
             {
-                // TODO: get max/min of x,y,z verts as model is being loaded in
-                
                 // load model
-                _model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
-                string result = _model != null ? "Model Loaded." : "ERROR";
+                var model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
+                var result = model != null ? $"{path} loaded successfully." : $"ERROR: {path}";
                 Console.WriteLine(result);
                 
-                //  build a list of the model's verticies
-                if (_model.Meshes[0].HasVertices)
+                //  get array of model's vertices, while updating _minVertex and _maxVertex
+                if (model != null && model.Meshes[0].HasVertices)
                 {
-                    List<float> tempvert = new List<float>();
-                    foreach (var vtx in _model.Meshes[0].Vertices)
-                    {
-                        tempvert.Add(vtx.X);
-                        tempvert.Add(vtx.Y);
-                        tempvert.Add(vtx.Z);
-                    }
-                    // TODO: insert aabb bounds here
-                    // convert list to array
-                    _verticies = tempvert.ToArray();
-                    // dispose of temporary list
-                    tempvert = null;
+                    Vertices = ExtractDataFromFloatVectorList(model.Meshes[0].Vertices, UpdateMinMax).ToArray();
                 }
                 
-                // get array of UVs
-                if (_model.Meshes[0].HasTextureCoords(0))
+                // get array of model's UVs
+                if (model != null && model.Meshes[0].HasTextureCoords(0))
                 {
-                    // build a list of the model's UVs
-                    List<float> tempuv = new List<float>();
-                    foreach (var vtx in _model.Meshes[0].TextureCoordinateChannels[0])
-                    {
-                        tempuv.Add(vtx.X);
-                        tempuv.Add(vtx.Y);
-                        tempuv.Add(vtx.Z);
-                    }
-                    // convert list to array
-                    _uvs = tempuv.ToArray();
-                    // dispose of temporary list
-                    tempuv = null;
+                    TexCoords = ExtractDataFromFloatVectorList(model.Meshes[0].TextureCoordinateChannels[0]).ToArray();
                 }
                 
-                //  build a list of the model's normals
-                if (_model.Meshes[0].HasNormals)
+                //  get array of the model's normals
+                if (model != null && model.Meshes[0].HasNormals)
                 {
-                    List<float> tempnorm = new List<float>();
-                    foreach (var vtx in _model.Meshes[0].Normals)
-                    {
-                        tempnorm.Add(vtx.X);
-                        tempnorm.Add(vtx.Y);
-                        tempnorm.Add(vtx.Z);
-                    }
-                    // convert list to array
-                    _normals = tempnorm.ToArray();
-                    // dispose of temporary list
-                    tempnorm = null;
+                    Normals = ExtractDataFromFloatVectorList(model.Meshes[0].Normals).ToArray();
                 }
                 
-                // get array of indicies
-                _indicies = _model.Meshes[0].GetUnsignedIndices();
+                // get array of indices
+                Indices = model?.Meshes[0].GetUnsignedIndices();
             }
             
             // catch exception on model load failure
@@ -102,8 +68,72 @@ namespace Bulldog.Utils
         
         public void Dispose()
         {
-            //In order to dispose we need to delete the opengl handle for the texture.
-            //_gl.DeleteTexture(_handle);
+            // if texture is stored, dispose of it properly
+        }
+        
+        
+        
+        
+        // helper functions
+        
+        // TODO: make this function type-agnostic
+        /// <summary>
+        /// Strips each X,Y,Z coordinate out of each <see cref="Vector3D"/> in <paramref name="vectorList"/>.
+        /// </summary>
+        /// <param name="vectorList"><see cref="List{T}"/> of <see cref="Vector3D"/> to be stripped.</param>
+        /// <param name="map">Optional void function to run for each <see cref="Vector3D"/> in <paramref name="vectorList"/></param>
+        /// <returns>A flat <see cref="List{T}"/> (T = float) of coordinates.</returns>
+        private static List<float> ExtractDataFromFloatVectorList(List<Vector3D> vectorList, Action<Vector3D> map = null)
+        {
+            var temp = new List<float>();
+            // build up list
+            foreach (var vtx in vectorList)
+            {
+                temp.Add(vtx.X);
+                temp.Add(vtx.Y);
+                temp.Add(vtx.Z);
+                // if map is not null, call it
+                map?.Invoke(vtx);
+            }
+            return temp;
+        }
+
+        /// <summary>
+        /// Updates _minVertex and/or _maxVertex with testVert if they are smaller or larger respectively.
+        /// </summary>
+        /// <param name="testVert">Vector3D to test _minVertex and _maxVertex against</param>
+        private void UpdateMinMax(Vector3D testVert)
+        {
+            if (IsLessThan(testVert, _minVertex))
+            {
+                _minVertex = testVert;
+            }
+            if (IsGreaterThan(testVert, _maxVertex))
+            {
+                _maxVertex = testVert;
+            }
+        }
+
+        /// Compares 2 Vector3D's
+        private static bool IsGreaterThan(Vector3D lhs, Vector3D rhs)
+        {
+            return
+            (
+                lhs.X > rhs.X &&
+                lhs.Y > rhs.Y &&
+                lhs.Z > rhs.Z
+            );
+        }
+        
+        /// Compares 2 Vector3D's
+        private static bool IsLessThan(Vector3D lhs, Vector3D rhs)
+        {
+            return
+            (
+                lhs.X < rhs.X &&
+                lhs.Y < rhs.Y &&
+                lhs.Z < rhs.Z
+            );
         }
     }
 }

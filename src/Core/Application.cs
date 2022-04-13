@@ -16,9 +16,9 @@ namespace Bulldog.Core
         private static IWindow _window;
         private static GL _gl;
 
-        private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader.vert";
-        private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader.frag";
-        private const string TexturePath = "../../../src/Scene/TestTexture.jpg";
+        private const string VertShaderSourcePath = "../../../src/Renderer/Shaders/shader2.vert";
+        private const string FragShaderSourcePath = "../../../src/Renderer/Shaders/shader2.frag";
+        private const string TexturePath = "../../../src/Scene/uv-test.png";
         private const string ObjPath = "../../../src/Scene/suzanne.obj";
 
         private static BufferObject<float> _vbo;
@@ -55,26 +55,14 @@ namespace Bulldog.Core
         {
             //Set-up input context.
             IInputContext input = _window.CreateInput();
-            for (int i = 0; i < input.Keyboards.Count; i++)
+
+            foreach (var keyboard in input.Keyboards)
             {
-                input.Keyboards[i].KeyDown += KeyDown;
+                keyboard.KeyDown += KeyDown;
             }
             
             //Getting the opengl api for drawing to the screen.
             _gl = GL.GetApi(_window);
-            
-            //Creating buffers
-            //Console.WriteLine("Creating buffers...");
-            //Initializing a vertex buffer that holds the vertex data.
-            //_vbo = new BufferObject<float>(_gl, TestQuad.Vertices, BufferTargetARB.ArrayBuffer);
-            //Initializing a element buffer that holds the index data.
-            //_ebo = new BufferObject<uint>(_gl, TestQuad.Indices, BufferTargetARB.ElementArrayBuffer);
-            //Creating a vertex array.
-            //_vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
-            //Telling the VAO object how to lay out the attribute pointers
-            //_vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-            //_vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
-            //Console.WriteLine("Buffers done.");
             
             //Creating a shader.
             Console.WriteLine("Compiling shaders...");
@@ -84,24 +72,34 @@ namespace Bulldog.Core
             //Load texture
             _texture = new Texture(_gl, TexturePath);
             
-            // try loading
             // load obj
             _myObj = new ObjLoader(ObjPath);
+            
             // create buffers
             Console.WriteLine("Creating buffers...");
-            _vbo = new BufferObject<float>(_gl, _myObj._verticies, BufferTargetARB.ArrayBuffer);
-            //BufferObject<float> uvVbo = new BufferObject<float>(_gl, _myObj._uvs, BufferTargetARB.ArrayBuffer);
-            // CopyBufferSubDataTarget.TextureBuffer
-            _ebo = new BufferObject<uint>(_gl, _myObj._indicies, BufferTargetARB.ElementArrayBuffer);
+            var verts = _myObj.Vertices;
+            var txcds = _myObj.TexCoords;
+            var norms = _myObj.Normals;
+            var bufferSize = (nuint) (verts.Length + txcds.Length + norms.Length);
+            // create an empty buffer of proper size
+            _vbo = new BufferObject<float>(_gl, BufferTargetARB.ArrayBuffer, bufferSize, null);
+            // populate buffer with data
+            _vbo.SetSubData(0, verts);
+            _vbo.SetSubData(verts.Length, txcds);
+            _vbo.SetSubData(verts.Length + txcds.Length, norms);
+            // create index buffer
+            _ebo = new BufferObject<uint>(_gl, _myObj.Indices, BufferTargetARB.ElementArrayBuffer);
+            // create vao to store buffers
             _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
-            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 3, 0);
-            _vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 3, sizeof(_vbo));
+            // tell vao how data is organized inside of vbo
+            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 0, 0);
+            _vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 0, verts.Length);
+            _vao.VertexAttributePointer(2, 3, VertexAttribPointerType.Float, 0, verts.Length + txcds.Length);
+            
             Console.WriteLine("Buffers done.");
         }
 
-        
-        
-        
+
         private static unsafe void OnRender(double obj)
         {
             //Here all rendering should be done.
@@ -115,13 +113,11 @@ namespace Bulldog.Core
             //Setting a uniform.
             //Bind a texture and and set the uTexture0 to use texture0.
             _texture.Bind(TextureUnit.Texture0);
-            //_shader.SetUniform("uTexture0", 0);
+            _shader.SetUniform("uTexture0", 0);
             
-            
-
             //Draw the geometry.
             //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
-            _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj._indicies.Length, DrawElementsType.UnsignedInt, null);
+            _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.Indices.Length, DrawElementsType.UnsignedInt, null);
         }
 
         
