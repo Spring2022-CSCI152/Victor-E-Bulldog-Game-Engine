@@ -7,7 +7,7 @@ namespace Bulldog.Renderer;
 
 public unsafe static class GBuffer
 {
-     public static uint Handle { get; private set; }
+     public static uint FBO { get; private set; }
 
      private static GL _gl;
      public static uint rboDepth { get; private set; }
@@ -21,8 +21,8 @@ public unsafe static class GBuffer
      {
           _gl = gl;
           // generate offscreen gBuffer
-          Handle = _gl.GenFramebuffer();
-          _gl.BindFramebuffer( GLEnum.Framebuffer , Handle);
+          FBO = _gl.GenFramebuffer();
+          _gl.BindFramebuffer( GLEnum.Framebuffer , FBO);
           
           gPostion = _gl.GenTexture();
           _gl.BindTexture(TextureTarget.Texture2D, gPostion );
