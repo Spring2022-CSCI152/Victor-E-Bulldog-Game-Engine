@@ -18,10 +18,18 @@ namespace Bulldog.Renderer
             vbo.Bind();
             ebo.Bind();
         }
-
-        public unsafe void VertexAttributePointer(uint index, int count, VertexAttribPointerType type, uint vertexSize, int offSet)
+        
+        /// <summary>
+        /// Defines an array of generic vertex attribute data.
+        /// </summary>
+        /// <param name="index">Specifies the index of the attribute.</param>
+        /// <param name="size">Specifies the number of components per vertex. Must be 1, 2, 3, 4.</param>
+        /// <param name="type">Specifies the data type of each component in the array.</param>
+        /// <param name="stride">Specifies the offset between consecutive vertex attributes. If stride is 0, the generic vertex attributes are understood to be tightly packed in the array.</param>
+        /// <param name="offSet">Specifies the offset to the first component of this vertex attribute in the data store of the buffer</param>
+        public unsafe void VertexAttributePointer(uint index, int size, VertexAttribPointerType type, uint stride, int offSet)
         {
-            _gl.VertexAttribPointer(index, count, type, false, vertexSize * (uint) sizeof(TVertexType), (void*) (offSet * sizeof(TVertexType)));
+            _gl.VertexAttribPointer(index, size, type, false, (uint) (stride * sizeof(TVertexType)), (void*) (offSet * sizeof(TVertexType)));
             _gl.EnableVertexAttribArray(index);
         }
 

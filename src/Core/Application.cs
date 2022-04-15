@@ -5,24 +5,32 @@ using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
 using Silk.NET.OpenGL;
-using Shader = Silk.NET.OpenGL.Shader;
+using Shader = Bulldog.Renderer.Shader;
 using System.Drawing;
 using Bulldog.Utils;
+using Texture = Bulldog.Renderer.Texture;
 
 namespace Bulldog.Core
 {
     class Program
     {
         private static IWindow _window;
-        private static GL Gl;
+        private static GL _gl;
         private static IKeyboard primaryKeyboard;
         private const int Width = 800;
         private const int Height = 700;
-        private static BufferObject<float> Vbo;
-        private static BufferObject<uint> Ebo;
-        private static VertexArrayObject<float, uint> Vao;
-        private static Texture Texture;
-        private static Shader Shader;
+        private static BufferObject<float> _vbo;
+        private static BufferObject<uint> _ebo;
+        private static VertexArrayObject<float, uint> _vao;
+        private static Texture _texture;
+        private static Shader _shader;
+        // mesh
+        private static ObjLoader _myObj;
+
+        private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
+        private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
+        private const string TexturePath = "../../../src/Scene/uv-test.png";
+        private const string ObjPath = "../../../src/Scene/suzanne.obj";
 
         //Setup the camera's location, directions, and movement speed
         private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
@@ -35,57 +43,6 @@ namespace Bulldog.Core
 
         //Used to track change in mouse movement to allow for moving of the Camera
         private static Vector2 LastMousePosition;
-        
-        private static readonly float[] Vertices =
-        {
-            //X    Y      Z     U   V
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f  
-        };
-        private static readonly uint[] Indices =
-        {
-            0, 1, 3,
-            1, 2, 3
-        };
 
         private static void Main()
         {
@@ -107,48 +64,84 @@ namespace Bulldog.Core
         {
             //Set-up input context.
             IInputContext input = _window.CreateInput();
-            for (int i = 0; i < input.Keyboards.Count; i++)
+
+            foreach (var keyboard in input.Keyboards)
             {
-                input.Keyboards[i].KeyDown += KeyDown;
+                keyboard.KeyDown += KeyDown;
             }
-            Gl = GL.GetApi(_window);
-
-            Ebo = new BufferObject<uint>(Gl,Indices, BufferTargetARB.ElementArrayBuffer);
-            Vbo = new BufferObject<float>(Gl, Vertices, BufferTargetARB.ArrayBuffer);
-            Vao = new VertexArrayObject<float, uint>(Gl, Vbo, Ebo);
-
-            Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-            Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
             
-            Shader = new Shader(Gl, "shader.vert", "shader.frag");
-
-            Texture = new Texture(Gl, "silk.png");
+            //Getting the opengl api for drawing to the screen.
+            _gl = GL.GetApi(_window);
+            
+            //Creating a shader.
+            Console.WriteLine("Compiling shaders...");
+            _shader = new Shader(_gl, VertShaderSourcePath, FragShaderSourcePath);
+            Console.WriteLine("Shaders Done.");
+            
+            //Load texture
+            _texture = new Texture(_gl, TexturePath);
+            
+            // load obj
+            _myObj = new ObjLoader(ObjPath);
+            
+            // create buffers
+            Console.WriteLine("Creating buffers...");
+            var verts = _myObj.Vertices;
+            var txcds = _myObj.TexCoords;
+            var norms = _myObj.Normals;
+            var bufferSize = (nuint) (verts.Length + txcds.Length + norms.Length);
+            // create an empty buffer of proper size
+            _vbo = new BufferObject<float>(_gl, BufferTargetARB.ArrayBuffer, bufferSize, null);
+            // populate buffer with data
+            _vbo.SetSubData(0, verts);
+            _vbo.SetSubData(verts.Length, txcds);
+            _vbo.SetSubData(verts.Length + txcds.Length, norms);
+            // create index buffer
+            _ebo = new BufferObject<uint>(_gl, _myObj.Indices, BufferTargetARB.ElementArrayBuffer);
+            // create _vao to store buffers
+            _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
+            // tell _vao how data is organized inside of _vbo
+            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 0, 0);
+            _vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 0, verts.Length);
+            _vao.VertexAttributePointer(2, 3, VertexAttribPointerType.Float, 0, verts.Length + txcds.Length);
+            
+            Console.WriteLine("Buffers done.");
             
         }
 
         private static void OnRender(double obj)  //draw each frame
         {
-            Gl.Enable(EnableCap.DepthTest);
-            Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
-            Vao.Bind();
-            Texture.Bind();
-            Shader.Use();
-            Shader.SetUniform("uTexture0", 0);
-          
+            unsafe
+            {
+                _gl.Enable(EnableCap.DepthTest);
+                _gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
 
-            //Use elapsed time to convert to radians to allow our cube to rotate over time
-            var difference = (float) (_window.Time * 100);
+                //Bind the geometry and shader.
+                _vao.Bind();
+                _shader.Use();
+            
+                //Setting a uniform.
+                //Bind a texture and and set the uTexture0 to use texture0.
+                _texture.Bind(TextureUnit.Texture0);
+                _shader.SetUniform("uTexture0", 0);
+            
+                //Draw the geometry.
+                //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
+                _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.Indices.Length, DrawElementsType.UnsignedInt, null);
+                //Use elapsed time to convert to radians to allow our cube to rotate over time
+                var difference = (float) (_window.Time * 100);
 
-            var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
-            var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
-            var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 100.0f);
+                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
+                var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
+                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 100.0f);
 
-            Shader.SetUniform("uModel", model);
-            Shader.SetUniform("uView", view);
-            Shader.SetUniform("uProjection", projection);
+                _shader.SetUniform("uModel", model);
+                _shader.SetUniform("uView", view);
+                _shader.SetUniform("uProjection", projection);
 
-            //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
-            Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+                //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
+                //_gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            }
         }
 
         private static void OnUpdate(double obj)
@@ -158,10 +151,9 @@ namespace Bulldog.Core
 
         private static void OnClose()
         {
-            Vbo.Dispose();
-            Ebo.Dispose();
-            Vao.Dispose();
-         
+            _vbo.Dispose();
+            _ebo.Dispose();
+            _vao.Dispose();
         }
         
         private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
