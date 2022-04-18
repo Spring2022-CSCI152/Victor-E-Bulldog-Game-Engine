@@ -1,10 +1,7 @@
 ﻿using Silk.NET.OpenGL;
-using System;
-//TODO: update SixLabors to v2.0.0
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Runtime.InteropServices;
-using SixLabors.ImageSharp.Processing;
 
 namespace Bulldog.Renderer
 {
@@ -16,7 +13,7 @@ namespace Bulldog.Renderer
         public unsafe Texture(GL gl, string path)
         {
             //Loading an image using image.sharp.
-            Image<Rgba32> img = (Image<Rgba32>) Image.Load(path);
+            var img = (Image<Rgba32>) Image.Load(path);
 
             // OpenGL has image origin in the bottom-left corner.
             fixed (void* data = &MemoryMarshal.GetReference(img.GetPixelRowSpan(0)))
@@ -63,13 +60,13 @@ namespace Bulldog.Renderer
         {
             //When we bind a texture we can choose which texture.slot we can bind it to.
             _gl.ActiveTexture(textureSlot);
-            _gl.BindTexture(TextureTarget.Texture2D, _handle);
+            _gl.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
         public void Dispose()
         {
             //In order to dispose we need to delete the opengl handle for the texture.
-            _gl.DeleteTexture(_handle);
+            _gl.DeleteTexture(Handle);
         }
     }
 }
