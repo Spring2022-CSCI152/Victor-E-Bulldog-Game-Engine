@@ -124,3 +124,4 @@ C:\Users\harpi\RiderProjects\Team1\bin\Debug\net6.0\runtimes\linux-x64\native\li
 C:\Users\harpi\RiderProjects\Team1\bin\Debug\net6.0\runtimes\osx-x64\native\libassimp.dylib
 C:\Users\harpi\RiderProjects\Team1\bin\Debug\net6.0\runtimes\win-x64\native\assimp.dll
 C:\Users\harpi\RiderProjects\Team1\bin\Debug\net6.0\runtimes\win-x86\native\assimp.dll
+C:\Users\harpi\RiderProjects\Team1\bin\Debug\net6.0\SixLabors.Core.dll

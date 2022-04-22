@@ -30,7 +30,9 @@ namespace Bulldog.Core
         private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
         private const string TexturePath = "../../../src/Scene/uv-test.png";
-        private const string ObjPath = "../../../src/Scene/suzanne.obj";
+        // private const string ObjPath = "../../../src/Scene/suzanne.obj";
+        // private const string ObjPath = "../../../res/CLASSROOM.obj";
+        private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
 
         //Setup the camera's location, directions, and movement speed
         private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);

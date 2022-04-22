@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9Srt6ZCTQKzHd19LT3uiI2APERpwJKtGfmWfJGVzo0GG4vX2LR4ijWX/8tZY4/x01feQwFaZVrcYAZ7NnSJV3g==",
+  "dgSpecHash": "Zj+slyHea3yISC05R8zT4eYeQwBVUTRXE7b1dxtSwY1uu4lNwVvcBVOy40zle2X3EcxIZp0yu/iri0oabOEnFQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\harpi\\RiderProjects\\Team1\\Bulldog.csproj",
   "expectedPackageFiles": [
@@ -46,6 +46,7 @@
     "C:\\Users\\harpi\\.nuget\\packages\\silk.net.windowing.common\\2.13.0\\silk.net.windowing.common.2.13.0.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\silk.net.windowing.glfw\\2.13.0\\silk.net.windowing.glfw.2.13.0.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\silk.net.windowing.sdl\\2.13.0\\silk.net.windowing.sdl.2.13.0.nupkg.sha512",
+    "C:\\Users\\harpi\\.nuget\\packages\\sixlabors.core\\1.0.0-beta0008\\sixlabors.core.1.0.0-beta0008.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\sixlabors.imagesharp\\1.0.4\\sixlabors.imagesharp.1.0.4.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",
     "C:\\Users\\harpi\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
