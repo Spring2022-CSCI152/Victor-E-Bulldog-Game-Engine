@@ -42,6 +42,10 @@
               "target": "Package",
               "version": "[4.1.0, )"
             },
+            "DefaultEcs": {
+              "target": "Package",
+              "version": "[0.17.2, )"
+            },
             "Microsoft.NETFramework.ReferenceAssemblies": {
               "suppressParent": "All",
               "target": "Package",

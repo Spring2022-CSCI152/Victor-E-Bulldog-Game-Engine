@@ -8,6 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AssimpNet" Version="4.1.0" />
+      <PackageReference Include="DefaultEcs" Version="0.17.2" />
       <PackageReference Include="Silk.NET" Version="2.13.0" />
       <PackageReference Include="Silk.NET.Core" Version="2.13.0" />
       <PackageReference Include="SixLabors.Core" Version="1.0.0-beta0008" />

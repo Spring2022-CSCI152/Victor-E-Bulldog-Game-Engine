@@ -35,6 +35,15 @@
           }
         }
       },
+      "DefaultEcs/0.17.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/DefaultEcs.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/DefaultEcs.dll": {}
+        }
+      },
       "Microsoft.CSharp/4.7.0": {
         "type": "package",
         "compile": {
@@ -1587,6 +1596,24 @@
         "runtimes/osx-x64/native/libassimp.dylib",
         "runtimes/win-x64/native/assimp.dll",
         "runtimes/win-x86/native/assimp.dll"
+      ]
+    },
+    "DefaultEcs/0.17.2": {
+      "sha512": "3It4x4eCRuJZ3jvMFJFuyL6a4N6+zT0QUopY60xQxikAtzFh7tZ0oDtw8VVT83H95LOJzWZud8lIMVUbtOA7kg==",
+      "type": "package",
+      "path": "defaultecs/0.17.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "defaultecs.0.17.2.nupkg.sha512",
+        "defaultecs.nuspec",
+        "lib/netstandard1.1/DefaultEcs.dll",
+        "lib/netstandard1.1/DefaultEcs.xml",
+        "lib/netstandard2.0/DefaultEcs.dll",
+        "lib/netstandard2.0/DefaultEcs.xml",
+        "lib/netstandard2.1/DefaultEcs.dll",
+        "lib/netstandard2.1/DefaultEcs.xml",
+        "logo.png"
       ]
     },
     "Microsoft.CSharp/4.7.0": {
@@ -5522,6 +5549,7 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "AssimpNet >= 4.1.0",
+      "DefaultEcs >= 0.17.2",
       "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.2",
       "Silk.NET >= 2.13.0",
       "Silk.NET.Core >= 2.13.0",
@@ -5569,6 +5597,10 @@
           "AssimpNet": {
             "target": "Package",
             "version": "[4.1.0, )"
+          },
+          "DefaultEcs": {
+            "target": "Package",
+            "version": "[0.17.2, )"
           },
           "Microsoft.NETFramework.ReferenceAssemblies": {
             "suppressParent": "All",

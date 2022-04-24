@@ -1,10 +1,10 @@
+using System.Numerics;
+using Bulldog.core;
+using Bulldog.Utils;
 using Silk.NET.Input;
+using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
-using System.Numerics;
-using Silk.NET.Maths;
-using Bulldog.Renderer;
-using Bulldog.Utils;
 using Shader = Bulldog.Renderer.Shader;
 using Texture = Bulldog.Renderer.Texture;
 
@@ -12,162 +12,105 @@ namespace Bulldog.Core
 {
     class Program
     {
-        // ReSharper disable once InconsistentNaming
-        private static IWindow window;
+        private static IWindow Window;
         private static GL Gl;
-
+        private static IKeyboard PrimaryKeyboard;
         private const int Width = 800;
         private const int Height = 700;
-
-        private static BufferObject<float> Vbo;
-        private static BufferObject<uint> Ebo;
-        private static VertexArrayObject<float, uint> Vao;
         private static Texture Texture;
         private static Shader Shader;
-        private static Shader GeometryPassShader;
+        // mesh
+        private static ObjLoader MyObj;
+        private static Mesh MyMesh;
 
-        //Setup the camera's location, and relative up and right directions
-        private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
-        private static Vector3 CameraTarget = Vector3.Zero;
-        private static Vector3 CameraDirection = Vector3.Normalize(CameraPosition - CameraTarget);
-        private static Vector3 CameraRight = Vector3.Normalize(Vector3.Cross(Vector3.UnitY, CameraDirection));
-        private static Vector3 CameraUp = Vector3.Cross(CameraDirection, CameraRight);
+        private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
+        private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
+        private const string TexturePath = "../../../src/Scene/uv-test.png";
+        private const string ObjPath = "../../../src/Scene/suzanne.obj";
 
-        // ReSharper disable once InconsistentNaming
+        //Setup the camera's location, directions, and movement speed
+        private static Camera Camera;
 
+        //Used to track change in mouse movement to allow for moving of the Camera
+        private static Vector2 LastMousePosition;
 
-        private static readonly float[] Vertices =
-        {
-            //X    Y      Z     U   V
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-        };
-
-        private static readonly uint[] Indices =
-        {
-            0, 1, 3,
-            1, 2, 3
-        };
-
-        private static void Main(string[] args)
+        private static void Main()
         {
             var options = WindowOptions.Default;
             options.Size = new Vector2D<int>(800, 600);
-            options.Title = "Bulldog Forward Rendered Cube Test";
+            options.Title = "LearnOpenGL with Silk.NET";
             options.PreferredDepthBufferBits = 24;
-            window = Window.Create(options);
+            Window = Silk.NET.Windowing.Window.Create(options);
 
-            window.Load += OnLoad;
-            window.Render += OnRender;
-            window.Closing += OnClose;
+            Window.Load += OnLoad;
+            Window.Update += OnUpdate;
+            Window.Render += OnRender;
+            Window.Closing += OnClose;
 
-            window.Run();
+            Window.Run();
         }
-
+        
         private static void OnLoad()
         {
-            IInputContext input = window.CreateInput();
-            for (int i = 0; i < input.Keyboards.Count; i++)
+            //Set-up input context.
+            IInputContext input = Window.CreateInput();
+
+            foreach (var keyboard in input.Keyboards)
             {
-                input.Keyboards[i].KeyDown += KeyDown;
+                keyboard.KeyDown += KeyDown;
             }
-
-            Gl = GL.GetApi(window);
             
-            GBuffer.init(Height,Width, Gl);
-
-            Ebo = new BufferObject<uint>(Gl, Indices, BufferTargetARB.ElementArrayBuffer);
-            Vbo = new BufferObject<float>(Gl, Vertices, BufferTargetARB.ArrayBuffer);
-            Vao = new VertexArrayObject<float, uint>(Gl, Vbo, Ebo);
-
-            Vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 5, 0);
-            Vao.VertexAttributePointer(1, 2, VertexAttribPointerType.Float, 5, 3);
-
+            //Getting the opengl api for drawing to the screen.
+            Gl = GL.GetApi(Window);
+            Camera = new Camera();
+            
+            //Creating a shader.
+            Console.WriteLine("Compiling shaders...");
             Shader = new Shader(Gl, "shader.vert", "shader.frag");
-            //GeometryPassShader = new Shader(Gl, "GeometryPassShader.Vert", "GeometryPassShader,Frag");
-
-            Texture = new Texture(Gl, "silk.png");
+            Console.WriteLine("Shaders Done.");
+            
+            //Load texture
+            Texture = new Texture(Gl, TexturePath);
+            
+            // load obj
+            MyObj = new ObjLoader(ObjPath);
+            MyMesh = new Mesh(Gl, MyObj, Texture);
+            
+            // create buffers
+            Console.WriteLine("Buffers done.");
+            
         }
 
-        private static void OnRender(double obj)
+        private static void OnRender(double obj)  //draw each frame
         {
-            // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-            Gl.Clear((uint) (ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit));
-            
-            Vao.Bind();
-            
-            Texture.Bind();
-            
+            Gl.Enable(EnableCap.DepthTest);
+            Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
 
+            //Bind the geometry and shader.
+            MyMesh.Draw(Shader);
             //Use elapsed time to convert to radians to allow our cube to rotate over time
-            var difference = (float) (window.Time * 100);
-            
-            Gl.BindFramebuffer(FramebufferTarget.Framebuffer, GBuffer.Handle);
-                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
-                var view = Matrix4x4.CreateLookAt(CameraPosition, CameraTarget, CameraUp);
-                // ReSharper disable once PossibleLossOfFraction
-                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), Width / Height, 0.1f, 100.0f);
-                //GeometryPassShader.Use();
-                //GeometryPassShader.SetUniform("projection", projection);
-                //GeometryPassShader.SetUniform("view", view);
-                //GeometryPassShader.SetUniform("model", model);
-                //We're drawing with just vertices and no indicies, and it takes 36 verticies to have a six-sided textured cube
-            Gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            var difference = (float) (Window.Time * 100);
+
+            //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
+            //_gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+        }
+
+        private static void OnUpdate(double obj)
+        {
+           
         }
 
         private static void OnClose()
         {
-            Vbo.Dispose();
-            Ebo.Dispose();
-            Vao.Dispose();
-            Shader.Dispose();
-            Texture.Dispose();
+            MyMesh.Dispose();
         }
-
+        
         private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
         {
+            //Check to close the window on escape.
             if (arg2 == Key.Escape)
             {
-                window.Close();
+                Window.Close();
             }
         }
     }

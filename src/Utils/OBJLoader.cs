@@ -2,6 +2,8 @@
 
 using Assimp;
 using Assimp.Configs;
+//using Silk.NET.Maths;
+
 // using Silk.NET.OpenGL;
 // using Scene = Assimp.Scene;
 
