@@ -7,7 +7,8 @@ namespace Bulldog.Renderer
 {
     public class Texture : IDisposable
     {
-        private uint _handle;
+        public TextureTarget Type;
+        private uint Handle { get; set; }
         private GL _gl;
 
         public unsafe Texture(GL gl, string path)
@@ -41,7 +42,7 @@ namespace Bulldog.Renderer
             _gl = gl;
 
             //Generating the opengl handle;
-            _handle = _gl.GenTexture();
+            Handle = _gl.GenTexture();
             Bind();
 
             //Setting the data of a texture.
