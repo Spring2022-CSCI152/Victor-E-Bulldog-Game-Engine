@@ -84,6 +84,7 @@ namespace Bulldog.Utils
                         }
                         // update maxIndex with this mesh's max index
                         maxIndex = (uint) Math.Floor(vertexList.Count / 3.0);
+                        // maxIndex = (uint) mesh.VertexCount;
                         // append data
                         indexList.AddRange(indices);
                     }

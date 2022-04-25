@@ -32,7 +32,8 @@ namespace Bulldog.Core
         private const string TexturePath = "../../../src/Scene/uv-test.png";
         // private const string ObjPath = "../../../src/Scene/suzanne.obj";
         // private const string ObjPath = "../../../res/CLASSROOM.obj";
-        private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
+        private const string ObjPath = "../../../res/classroom3.obj";
+        // private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
 
         //Setup the camera's location, directions, and movement speed
         private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
@@ -48,7 +49,7 @@ namespace Bulldog.Core
         
         // For Camera Speed
         private static float CameraRotateSpeed = 20f;
-        private static float CameraTranslateSpeed = 0.5f;
+        private static float CameraTranslateSpeed = 10f;
 
         private static void Main()
         {
@@ -141,7 +142,7 @@ namespace Bulldog.Core
                 // var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
                 var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(CameraYaw)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(CameraPitch));
                 var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
-                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 100.0f);
+                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 200.0f);
 
                 _shader.SetUniform("uModel", model);
                 _shader.SetUniform("uView", view);
