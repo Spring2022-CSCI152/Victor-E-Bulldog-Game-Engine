@@ -45,6 +45,10 @@ namespace Bulldog.Core
 
         //Used to track change in mouse movement to allow for moving of the Camera
         private static Vector2 LastMousePosition;
+        
+        // For Camera Speed
+        private static float CameraRotateSpeed = 20f;
+        private static float CameraTranslateSpeed = 0.5f;
 
         private static void Main()
         {
@@ -131,9 +135,11 @@ namespace Bulldog.Core
                 //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
                 _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.Indices.Length, DrawElementsType.UnsignedInt, null);
                 //Use elapsed time to convert to radians to allow our cube to rotate over time
-                var difference = (float) (_window.Time * 100);
+                // var difference = (float) (_window.Time * 100);
+                var difference = 1;
 
-                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
+                // var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
+                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(CameraYaw)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(CameraPitch));
                 var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
                 var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 100.0f);
 
@@ -148,7 +154,7 @@ namespace Bulldog.Core
 
         private static void OnUpdate(double obj)
         {
-           
+            
         }
 
         private static void OnClose()
@@ -158,13 +164,40 @@ namespace Bulldog.Core
             _vao.Dispose();
         }
         
-        private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
+        private static void KeyDown(IKeyboard arg1, Key key, int arg3)
         {
             //Check to close the window on escape.
-            if (arg2 == Key.Escape)
+            if (key == Key.Escape)
             {
                 _window.Close();
             }
+
+            switch (key)
+            {
+                case Key.W:
+                    CameraPitch += CameraRotateSpeed;
+                    break;
+                case Key.S:
+                    CameraPitch -= CameraRotateSpeed;
+                    break;
+                case Key.A:
+                    CameraYaw += CameraRotateSpeed;
+                    break;
+                case Key.D:
+                    CameraYaw -= CameraRotateSpeed;
+                    break;
+                case Key.F:
+                    CameraPosition.Z += CameraTranslateSpeed;
+                    break;
+                case Key.R:
+                    CameraPosition.Z -= CameraTranslateSpeed;
+                    break;
+            }
+        }
+
+        private static void WhileKeyDown()
+        {
+            
         }
     }
 }
