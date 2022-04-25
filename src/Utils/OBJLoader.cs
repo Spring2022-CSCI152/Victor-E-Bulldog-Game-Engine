@@ -33,42 +33,80 @@ namespace Bulldog.Utils
             {
                 // load model
                 var model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
-                var result = model != null ? $"{path} loaded successfully." : $"ERROR: {path}";
+                var result = model != null ? $"{path} loaded successfully." : $"FAILED TO LOAD: {path}";
                 Console.WriteLine(result);
                 
-                //  get array of model's vertices, while updating _minVertex and _maxVertex
-                if (model != null && model.Meshes[0].HasVertices)
+                // temporary containers
+                List<float> vertexList = new List<float>();
+                List<float> texCoordList = new List<float>();
+                List<float> normalList = new List<float>();
+                List<uint> indexList = new List<uint>();
+                uint maxIndex = 0;
+
+                if (model != null)
                 {
-                    Vertices = ExtractDataFromFloatVectorList(model.Meshes[0].Vertices, UpdateMinMax).ToArray();
-                }
+                    // load every mesh in the model file
+                    foreach (var mesh in model.Meshes)
+                    {
+                        //  get mesh's vertices, while updating _minVertex and _maxVertex
+                        if (mesh.HasVertices)
+                        {
+                            vertexList.AddRange(
+                                ExtractDataFromFloatVectorList(mesh.Vertices, UpdateMinMax)
+                                );
+                        }
                 
-                // get array of model's UVs
-                if (model != null && model.Meshes[0].HasTextureCoords(0))
-                {
-                    TexCoords = ExtractDataFromFloatVectorList(model.Meshes[0].TextureCoordinateChannels[0]).ToArray();
-                }
+                        // get mesh's UVs
+                        if (mesh.HasTextureCoords(0))
+                        {
+                            texCoordList.AddRange(
+                                ExtractDataFromFloatVectorList(mesh.TextureCoordinateChannels[0])
+                                );
+                        }
                 
-                //  get array of the model's normals
-                if (model != null && model.Meshes[0].HasNormals)
-                {
-                    Normals = ExtractDataFromFloatVectorList(model.Meshes[0].Normals).ToArray();
+                        // get mesh's normals
+                        if (mesh.HasNormals)
+                        {
+                            normalList.AddRange(
+                                ExtractDataFromFloatVectorList(mesh.Normals)
+                                );
+                        }
+                        
+                        // get mesh's indices
+                        var indices = new List<uint>(mesh.GetUnsignedIndices());
+                        // add previous mesh's maxIndex to this mesh's indices
+                        if (maxIndex != 0)
+                        {
+                            for (int i = 0; i < indices.Count; i++)
+                            {
+                                indices[i] += maxIndex;
+                            }
+                        }
+                        // update maxIndex with this mesh's max index
+                        maxIndex = (uint) Math.Floor(vertexList.Count / 3.0);
+                        // append data
+                        indexList.AddRange(indices);
+                    }
+                    
+                    // get arrays
+                    Vertices = vertexList.ToArray();
+                    TexCoords = texCoordList.ToArray();
+                    Normals = normalList.ToArray();
+                    Indices = indexList.ToArray();
                 }
-                
-                // get array of indices
-                Indices = model?.Meshes[0].GetUnsignedIndices();
             }
             
             // catch exception on model load failure
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine("OBJLoader failed to load model: " + e.Message);
                 throw;
             }
         }
         
         public void Dispose()
         {
-            // if texture is stored, dispose of it properly
+            
         }
         
         
