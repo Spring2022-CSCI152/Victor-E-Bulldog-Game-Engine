@@ -524,6 +524,18 @@
           "lib/net6.0/Silk.NET.Windowing.Sdl.dll": {}
         }
       },
+      "SixLabors.Core/1.0.0-beta0008": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.5.1"
+        },
+        "compile": {
+          "lib/netcoreapp2.1/SixLabors.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/SixLabors.Core.dll": {}
+        }
+      },
       "SixLabors.ImageSharp/1.0.4": {
         "type": "package",
         "compile": {
@@ -1548,6 +1560,79 @@
             "rid": "win-x64"
           }
         }
+      },
+      "xunit/2.4.2-pre.12": {
+        "type": "package",
+        "dependencies": {
+          "xunit.analyzers": "0.10.0",
+          "xunit.assert": "[2.4.2-pre.12]",
+          "xunit.core": "[2.4.2-pre.12]"
+        }
+      },
+      "xunit.abstractions/2.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/xunit.abstractions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/xunit.abstractions.dll": {}
+        }
+      },
+      "xunit.analyzers/0.10.0": {
+        "type": "package"
+      },
+      "xunit.assert/2.4.2-pre.12": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "compile": {
+          "lib/netstandard1.1/xunit.assert.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.assert.dll": {}
+        }
+      },
+      "xunit.core/2.4.2-pre.12": {
+        "type": "package",
+        "dependencies": {
+          "xunit.extensibility.core": "[2.4.2-pre.12]",
+          "xunit.extensibility.execution": "[2.4.2-pre.12]"
+        },
+        "build": {
+          "build/xunit.core.props": {},
+          "build/xunit.core.targets": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/xunit.core.props": {},
+          "buildMultiTargeting/xunit.core.targets": {}
+        }
+      },
+      "xunit.extensibility.core/2.4.2-pre.12": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "xunit.abstractions": "2.0.3"
+        },
+        "compile": {
+          "lib/netstandard1.1/xunit.core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.core.dll": {}
+        }
+      },
+      "xunit.extensibility.execution/2.4.2-pre.12": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "xunit.extensibility.core": "[2.4.2-pre.12]"
+        },
+        "compile": {
+          "lib/netstandard1.1/xunit.execution.dotnet.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.execution.dotnet.dll": {}
+        }
       }
     }
   },
@@ -2350,6 +2435,25 @@
         "silk.net.windowing.sdl.2.13.0.nupkg.sha512",
         "silk.net.windowing.sdl.nuspec",
         "silkdotnet_v3.png"
+      ]
+    },
+    "SixLabors.Core/1.0.0-beta0008": {
+      "sha512": "rrKPDN107tVOh+mUoNh+kHELa7WfYZREPPbYdiKJ3Rd6dex/UgDWDGBOjPJn4BBhmts/VGuaXMXyfT/BwiuH2g==",
+      "type": "package",
+      "path": "sixlabors.core/1.0.0-beta0008",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netcoreapp2.0/SixLabors.Core.dll",
+        "lib/netcoreapp2.0/SixLabors.Core.xml",
+        "lib/netcoreapp2.1/SixLabors.Core.dll",
+        "lib/netcoreapp2.1/SixLabors.Core.xml",
+        "lib/netstandard1.3/SixLabors.Core.dll",
+        "lib/netstandard1.3/SixLabors.Core.xml",
+        "lib/netstandard2.0/SixLabors.Core.dll",
+        "lib/netstandard2.0/SixLabors.Core.xml",
+        "sixlabors.core.1.0.0-beta0008.nupkg.sha512",
+        "sixlabors.core.nuspec"
       ]
     },
     "SixLabors.ImageSharp/1.0.4": {
@@ -5486,6 +5590,115 @@
         "ultz.native.sdl.2.0.14.1.nupkg.sha512",
         "ultz.native.sdl.nuspec"
       ]
+    },
+    "xunit/2.4.2-pre.12": {
+      "sha512": "FlZ/r9WdIy8x/0oF9mpWepkspYi+5e9YmKZfkxKFgEI6G8T3GC9mntYVI515FyXzQ584xPMrcv0b9Orx6MXa9g==",
+      "type": "package",
+      "path": "xunit/2.4.2-pre.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/logo-128-transparent.png",
+        "xunit.2.4.2-pre.12.nupkg.sha512",
+        "xunit.nuspec"
+      ]
+    },
+    "xunit.abstractions/2.0.3": {
+      "sha512": "pot1I4YOxlWjIb5jmwvvQNbTrZ3lJQ+jUGkGjWE3hEFM0l5gOnBWS+H3qsex68s5cO52g+44vpGzhAt+42vwKg==",
+      "type": "package",
+      "path": "xunit.abstractions/2.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/xunit.abstractions.dll",
+        "lib/net35/xunit.abstractions.xml",
+        "lib/netstandard1.0/xunit.abstractions.dll",
+        "lib/netstandard1.0/xunit.abstractions.xml",
+        "lib/netstandard2.0/xunit.abstractions.dll",
+        "lib/netstandard2.0/xunit.abstractions.xml",
+        "xunit.abstractions.2.0.3.nupkg.sha512",
+        "xunit.abstractions.nuspec"
+      ]
+    },
+    "xunit.analyzers/0.10.0": {
+      "sha512": "4/IDFCJfIeg6bix9apmUtIMwvOsiwqdEexeO/R2D4GReIGPLIRODTpId/l4LRSrAJk9lEO3Zx1H0Zx6uohJDNg==",
+      "type": "package",
+      "path": "xunit.analyzers/0.10.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/xunit.analyzers.dll",
+        "tools/install.ps1",
+        "tools/uninstall.ps1",
+        "xunit.analyzers.0.10.0.nupkg.sha512",
+        "xunit.analyzers.nuspec"
+      ]
+    },
+    "xunit.assert/2.4.2-pre.12": {
+      "sha512": "Av98kBp3Uc6eI1lWvGIVWrCWQHOSVKr/rI4VVc9yok1/xqk43RESH5IcYTOHEdiof37K7bzNfv4qaY/dwNMqIw==",
+      "type": "package",
+      "path": "xunit.assert/2.4.2-pre.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/logo-128-transparent.png",
+        "lib/netstandard1.1/xunit.assert.dll",
+        "lib/netstandard1.1/xunit.assert.xml",
+        "xunit.assert.2.4.2-pre.12.nupkg.sha512",
+        "xunit.assert.nuspec"
+      ]
+    },
+    "xunit.core/2.4.2-pre.12": {
+      "sha512": "0IKhUb1qivtZUQyWl3fQeqbwsKgo4Ndi9ECJ6S5GFb9l8Tr1T5wTPo3KaCOD9ccxRu4jOQmvm9c8fCQd7SyoZg==",
+      "type": "package",
+      "path": "xunit.core/2.4.2-pre.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/logo-128-transparent.png",
+        "build/xunit.core.props",
+        "build/xunit.core.targets",
+        "buildMultiTargeting/xunit.core.props",
+        "buildMultiTargeting/xunit.core.targets",
+        "xunit.core.2.4.2-pre.12.nupkg.sha512",
+        "xunit.core.nuspec"
+      ]
+    },
+    "xunit.extensibility.core/2.4.2-pre.12": {
+      "sha512": "z6ufPlcGpOEe/GNGAgfwtloAsb8mXuu4X6cBID8dsiTJ0OhD33mU/qkobnlFQVP724rYkFvtiVAjD47CpFFdiQ==",
+      "type": "package",
+      "path": "xunit.extensibility.core/2.4.2-pre.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/logo-128-transparent.png",
+        "lib/net452/xunit.core.dll",
+        "lib/net452/xunit.core.dll.tdnet",
+        "lib/net452/xunit.core.xml",
+        "lib/net452/xunit.runner.tdnet.dll",
+        "lib/net452/xunit.runner.utility.net452.dll",
+        "lib/netstandard1.1/xunit.core.dll",
+        "lib/netstandard1.1/xunit.core.xml",
+        "xunit.extensibility.core.2.4.2-pre.12.nupkg.sha512",
+        "xunit.extensibility.core.nuspec"
+      ]
+    },
+    "xunit.extensibility.execution/2.4.2-pre.12": {
+      "sha512": "FBuMA84KNxBMgHLVAqMGVD6DeejjPFTahZgxBClvey+C/HZipeuzKNX6x7Ne/Updpevz2KqituBJJ8yz9TrKbQ==",
+      "type": "package",
+      "path": "xunit.extensibility.execution/2.4.2-pre.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "_content/logo-128-transparent.png",
+        "lib/net452/xunit.execution.desktop.dll",
+        "lib/net452/xunit.execution.desktop.xml",
+        "lib/netstandard1.1/xunit.execution.dotnet.dll",
+        "lib/netstandard1.1/xunit.execution.dotnet.xml",
+        "xunit.extensibility.execution.2.4.2-pre.12.nupkg.sha512",
+        "xunit.extensibility.execution.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -5494,28 +5707,32 @@
       "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.2",
       "Silk.NET >= 2.13.0",
       "Silk.NET.Core >= 2.13.0",
-      "SixLabors.ImageSharp >= 1.0.4"
+      "SixLabors.Core >= 1.0.0-beta0008",
+      "SixLabors.ImageSharp >= 1.0.4",
+      "xunit >= 2.4.2-pre.12"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\harpi\\.nuget\\packages\\": {}
+    "C:\\Users\\salam\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harpi\\RiderProjects\\Team1\\Bulldog.csproj",
+      "projectUniqueName": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
       "projectName": "Bulldog",
-      "projectPath": "C:\\Users\\harpi\\RiderProjects\\Team1\\Bulldog.csproj",
-      "packagesPath": "C:\\Users\\harpi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\harpi\\RiderProjects\\Team1\\obj\\",
+      "projectPath": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
+      "packagesPath": "C:\\Users\\salam\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\salam\\RiderProjects\\Team1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\harpi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\salam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5552,9 +5769,17 @@
             "target": "Package",
             "version": "[2.13.0, )"
           },
+          "SixLabors.Core": {
+            "target": "Package",
+            "version": "[1.0.0-beta0008, )"
+          },
           "SixLabors.ImageSharp": {
             "target": "Package",
             "version": "[1.0.4, )"
+          },
+          "xunit": {
+            "target": "Package",
+            "version": "[2.4.2-pre.12, )"
           }
         },
         "imports": [
@@ -5572,7 +5797,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
