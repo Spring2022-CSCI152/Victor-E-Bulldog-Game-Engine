@@ -1,10 +1,9 @@
+using System.Numerics;
+
 namespace Bulldog.Utils.Collision;
 
 public interface ICollision
 {
-    IBox Box { get; }
-    
-    IBox Other { get; }
-    
-    IHit Hit { get; }
+    bool CheckCollision(IBox a, IBox b);
+    Vector3 CalculateMinSeparation(IBox a, IBox b);
 }
