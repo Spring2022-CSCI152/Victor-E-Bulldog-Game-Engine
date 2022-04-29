@@ -4,6 +4,7 @@ namespace Bulldog.Utils.Collision;
 
 public interface ICollision
 {
-    bool CheckCollision(IBox a, IBox b);
+    bool IntersectsAABB(IBox a, IBox b);
+    public bool IntersectsSphere(IBox A, float radius);
     Vector3 CalculateMinSeparation(IBox a, IBox b);
 }

@@ -6,13 +6,28 @@ namespace Bulldog.Utils.Collision;
 public class Collision : ICollision
 {
 
-    public bool CheckCollision(IBox a, IBox b)
+    public bool IntersectsAABB(IBox a, IBox b)
     {
         return( (a.GetMin().X <= b.GetMax().X && a.GetMax().X >= b.GetMax().X) &&
                 (a.GetMin().Y <= b.GetMax().Y && a.GetMax().Y >= b.GetMax().X) &&
                 (a.GetMin().Z <= b.GetMax().Z && a.GetMax().Z >= b.GetMax().Z)
             );
 
+    }
+
+    public bool IntersectsSphere(IBox A, float radius) {
+        if ( 
+            (A.Origin.X + radius < A.GetMin().X) ||
+            (A.Origin.Y + radius < A.GetMin().Y) ||
+            (A.Origin.Z + radius < A.GetMin().Z) ||
+            (A.Origin.X - radius > A.GetMax().X) ||
+            (A.Origin.Y - radius > A.GetMax().Y) ||
+            (A.Origin.Z - radius > A.GetMax().Z)
+        ) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public Vector3 CalculateMinSeparation(IBox a, IBox b)
