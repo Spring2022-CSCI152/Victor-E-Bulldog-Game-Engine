@@ -26,14 +26,17 @@ namespace Bulldog.Core
         private static Shader _shader;
         // mesh
         private static ObjLoader _myObj;
+        private static Mesh _myMesh;
 
         private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
         private const string TexturePath = "../../../src/Scene/uv-test.png";
         // private const string ObjPath = "../../../src/Scene/suzanne.obj";
         // private const string ObjPath = "../../../res/CLASSROOM.obj";
-        private const string ObjPath = "../../../res/classroom3.obj";
-        // private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
+        // private const string ObjPath = "../../../res/classroom3.obj";
+        // private const string ObjPath = "../../../res/SuzanneTri.obj";
+        private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
+        // private const string ObjPath = "../../../res/index-testing.obj";
 
         //Setup the camera's location, directions, and movement speed
         private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
@@ -90,6 +93,7 @@ namespace Bulldog.Core
             
             // load obj
             _myObj = new ObjLoader(ObjPath);
+            _myMesh = new Mesh(_gl, ObjPath, TexturePath);
             
             // create buffers
             Console.WriteLine("Creating buffers...");
@@ -122,7 +126,7 @@ namespace Bulldog.Core
             {
                 _gl.Enable(EnableCap.DepthTest);
                 _gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
-
+                
                 //Bind the geometry and shader.
                 _vao.Bind();
                 _shader.Use();
@@ -131,25 +135,25 @@ namespace Bulldog.Core
                 //Bind a texture and and set the uTexture0 to use texture0.
                 _texture.Bind(TextureUnit.Texture0);
                 _shader.SetUniform("uTexture0", 0);
-            
-                //Draw the geometry.
-                //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
-                _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.Indices.Length, DrawElementsType.UnsignedInt, null);
-                //Use elapsed time to convert to radians to allow our cube to rotate over time
-                // var difference = (float) (_window.Time * 100);
-                var difference = 1;
-
+                
                 // var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
                 var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(CameraYaw)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(CameraPitch));
                 var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
                 var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 200.0f);
 
-                _shader.SetUniform("uModel", model);
-                _shader.SetUniform("uView", view);
-                _shader.SetUniform("uProjection", projection);
+                // _shader.SetUniform("uModel", model);
+                // _shader.SetUniform("uView", view);
+                // _shader.SetUniform("uProjection", projection);
 
+                //Draw the geometry.
+                //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
+                // _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.Indices.Length, DrawElementsType.UnsignedInt, null);
+                //Use elapsed time to convert to radians to allow our cube to rotate over time
+                // var difference = (float) (_window.Time * 100);
+                // var difference = 1;
                 //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
                 //_gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+                _myMesh.Draw(_shader, model, view, projection);
             }
         }
 

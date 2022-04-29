@@ -2,8 +2,6 @@
 
 using Assimp;
 using Assimp.Configs;
-// using Silk.NET.OpenGL;
-// using Scene = Assimp.Scene;
 
 namespace Bulldog.Utils
 {
@@ -14,7 +12,6 @@ namespace Bulldog.Utils
         public readonly float[] TexCoords;
         public readonly float[] Normals;
         public readonly uint[] Indices;
-        //public readonly _vbo;
         private Vector3D _minVertex = new Vector3D(float.MaxValue,float.MaxValue,float.MaxValue);
         private Vector3D _maxVertex = new Vector3D(float.MinValue,float.MinValue,float.MinValue);
         
@@ -24,7 +21,7 @@ namespace Bulldog.Utils
         ///  Loads the mesh data contained in an OBJ file.
         /// </summary>
         /// <param name="path">Path to OBJ file</param>
-        public ObjLoader(/*GL gl, */string path)
+        public ObjLoader(string path)
         {
             var importer = new AssimpContext();
             importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
@@ -74,6 +71,11 @@ namespace Bulldog.Utils
                         
                         // get mesh's indices
                         var indices = new List<uint>(mesh.GetUnsignedIndices());
+                        
+                        // Console.WriteLine("Alt Max index: " + Math.Floor(mesh.VertexCount / 3.0));
+                        // Console.WriteLine("This Max Index: " + indices.Max(e => e));
+                        // Console.WriteLine("Alt Max index: " + Math.Floor(mesh.VertexCount / 3.0));
+                        
                         // add previous mesh's maxIndex to this mesh's indices
                         if (maxIndex != 0)
                         {
@@ -83,7 +85,7 @@ namespace Bulldog.Utils
                             }
                         }
                         // update maxIndex with this mesh's max index
-                        maxIndex = (uint) Math.Floor(vertexList.Count / 3.0);
+                        maxIndex = (uint) Math.Ceiling(vertexList.Count / 3.0);
                         // maxIndex = (uint) mesh.VertexCount;
                         // append data
                         indexList.AddRange(indices);
@@ -115,7 +117,6 @@ namespace Bulldog.Utils
         
         // helper functions
         
-        // TODO: make this function type-agnostic
         /// <summary>
         /// Strips each X,Y,Z coordinate out of each <see cref="Vector3D"/> in <paramref name="vectorList"/>.
         /// </summary>

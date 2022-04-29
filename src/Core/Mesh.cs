@@ -1,4 +1,6 @@
-﻿namespace Bulldog.Core;
+﻿using System.Numerics;
+
+namespace Bulldog.Core;
 
 using Bulldog.Renderer;
 using Bulldog.Utils;
@@ -29,7 +31,7 @@ public class Mesh
         _verts = myObj.Vertices;
         _txcds = myObj.TexCoords;
         _norms = myObj.Normals;
-        _indices = myObj.Indices; ;
+        _indices = myObj.Indices;
         _textures.Add(myTexture);
         // now that we have all the required data, set the vertex buffers and its attribute pointers.
         Init();
@@ -49,7 +51,7 @@ public class Mesh
         Init();
     }
 
-    public void Draw(Renderer.Shader shader)
+    public void Draw(Renderer.Shader shader, Matrix4x4 model, Matrix4x4 view, Matrix4x4 projection)
     {
         unsafe
         {
@@ -60,6 +62,10 @@ public class Mesh
             //Bind a texture and and set the uTexture0 to use texture0.
             _textures[0].Bind();
             shader.SetUniform("uTexture0", 0);
+            
+            shader.SetUniform("uModel", model);
+            shader.SetUniform("uView", view);
+            shader.SetUniform("uProjection", projection);
             
             //Draw the geometry.
             //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
