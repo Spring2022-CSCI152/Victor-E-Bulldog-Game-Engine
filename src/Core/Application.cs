@@ -33,7 +33,6 @@ namespace Bulldog.Core
         private const string TexturePath = "../../../src/Scene/uv-test.png";
         // private const string ObjPath = "../../../src/Scene/suzanne.obj";
         // private const string ObjPath = "../../../res/CLASSROOM.obj";
-        // private const string ObjPath = "../../../res/classroom3.obj";
         // private const string ObjPath = "../../../res/SuzanneTri.obj";
         private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
         // private const string ObjPath = "../../../res/index-testing.obj";

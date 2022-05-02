@@ -18,7 +18,20 @@ namespace Bulldog.Renderer
             vbo.Bind();
             ebo.Bind();
         }
-        
+
+        /// <summary>
+        /// Constructor that only creates the VAO, and passes the GL context.
+        /// VBOS MUST BE BOUND MANUALLY!
+        /// </summary>
+        /// <param name="gl">OpenGL Context.</param>
+        public VertexArrayObject(GL gl)
+        {
+            _gl = gl;
+            
+            _handle = _gl.GenVertexArray();
+            Bind();
+        }
+
         /// <summary>
         /// Defines an array of generic vertex attribute data.
         /// </summary>
