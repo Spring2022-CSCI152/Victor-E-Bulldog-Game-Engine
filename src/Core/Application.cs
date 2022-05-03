@@ -19,39 +19,46 @@ namespace Bulldog.Core
         private static IKeyboard primaryKeyboard;
         private const int Width = 800;
         private const int Height = 700;
-        private static BufferObject<float> _vbo;
-        private static BufferObject<uint> _ebo;
+        // private static BufferObject<float> _vbo;
+        private static BufferObject<float> _vertBuffer;
+        private static BufferObject<float> _normBuffer;
+        private static BufferObject<float> _txcdBuffer;
+        // private static BufferObject<uint> _ebo;
+        private static BufferObject<uint> _indexBuffer;
         private static VertexArrayObject<float, uint> _vao;
         private static Texture _texture;
         private static Shader _shader;
         // mesh
-        private static ObjLoader _myObj;
-        private static Mesh _myMesh;
+        // private static ObjLoader _myObj;
+        // private static Mesh _myMesh;
+        private static NuMesh _nuMesh;
 
         private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
         private const string TexturePath = "../../../src/Scene/uv-test.png";
+        private const string ObjPath = "../../../res/index-testing.obj";
         // private const string ObjPath = "../../../src/Scene/suzanne.obj";
         // private const string ObjPath = "../../../res/CLASSROOM.obj";
         // private const string ObjPath = "../../../res/SuzanneTri.obj";
-        private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
-        // private const string ObjPath = "../../../res/index-testing.obj";
-
-        //Setup the camera's location, directions, and movement speed
-        private static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
-        private static Vector3 CameraFront = new Vector3(0.0f, 0.0f, -1.0f);
-        private static Vector3 CameraUp = Vector3.UnitY;
-        private static Vector3 CameraDirection = Vector3.Zero;
-        private static float CameraYaw = -90f;
-        private static float CameraPitch = 0f;
-        private static float CameraZoom = 45f;
+        // private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
 
         //Used to track change in mouse movement to allow for moving of the Camera
         private static Vector2 LastMousePosition;
         
-        // For Camera Speed
-        private static float CameraRotateSpeed = 20f;
-        private static float CameraTranslateSpeed = 10f;
+        private static class CamProps
+        {
+            //Setup the camera's location, directions, and movement speed
+            public static Vector3 CameraPosition = new Vector3(0.0f, 0.0f, 3.0f);
+            public static Vector3 CameraFront = new Vector3(0.0f, 0.0f, -1.0f);
+            public static Vector3 CameraUp = Vector3.UnitY;
+            public static Vector3 CameraDirection = Vector3.Zero;
+            public static float CameraYaw = -90f;
+            public static float CameraPitch = 0f;
+            public static float CameraZoom = 45f;
+            // For Camera Speed
+            public static float CameraRotateSpeed = 20f;
+            public static float CameraTranslateSpeed = 10f;
+        }
 
         private static void Main()
         {
@@ -87,36 +94,102 @@ namespace Bulldog.Core
             _shader = new Shader(_gl, VertShaderSourcePath, FragShaderSourcePath);
             Console.WriteLine("Shaders Done.");
             
+            // load model
+            _nuMesh = new NuMesh(_gl, ObjPath);
+            
             //Load texture
             _texture = new Texture(_gl, TexturePath);
             
-            // load obj
-            _myObj = new ObjLoader(ObjPath);
-            _myMesh = new Mesh(_gl, ObjPath, TexturePath);
-            
             // create buffers
-            Console.WriteLine("Creating buffers...");
-            var verts = _myObj.Vertices;
-            var txcds = _myObj.TexCoords;
-            var norms = _myObj.Normals;
-            var bufferSize = (nuint) (verts.Length + txcds.Length + norms.Length);
-            // create an empty buffer of proper size
-            _vbo = new BufferObject<float>(_gl, BufferTargetARB.ArrayBuffer, bufferSize, null);
-            // populate buffer with data
-            _vbo.SetSubData(0, verts);
-            _vbo.SetSubData(verts.Length, txcds);
-            _vbo.SetSubData(verts.Length + txcds.Length, norms);
+            InitBuffers();
+            
+
+            // // load obj
+            // _myObj = new ObjLoader(ObjPath);
+            // _myMesh = new Mesh(_gl, ObjPath, TexturePath);
+
+            // //create buffers
+            // Console.WriteLine("Creating buffers...");
+            // var verts = _myObj.Vertices;
+            // var txcds = _myObj.TexCoords;
+            // var norms = _myObj.Normals;
+            // var bufferSize = (nuint) (verts.Length + txcds.Length + norms.Length);
+            // // create an empty buffer of proper size
+            // _vbo = new BufferObject<float>(_gl, BufferTargetARB.ArrayBuffer, bufferSize, null);
+            // // populate buffer with data
+            // _vbo.SetSubData(0, verts);
+            // _vbo.SetSubData(verts.Length, txcds);
+            // _vbo.SetSubData(verts.Length + txcds.Length, norms);
             // create index buffer
-            _ebo = new BufferObject<uint>(_gl, _myObj.Indices, BufferTargetARB.ElementArrayBuffer);
-            // create _vao to store buffers
-            _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
-            // tell _vao how data is organized inside of _vbo
-            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 0, 0);
-            _vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 0, verts.Length);
-            _vao.VertexAttributePointer(2, 3, VertexAttribPointerType.Float, 0, verts.Length + txcds.Length);
+            // _ebo = new BufferObject<uint>(_gl, _myObj.Indices, BufferTargetARB.ElementArrayBuffer);
+            // // create _vao to store buffers
+            // _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
+            // // tell _vao how data is organized inside of _vbo
+            // _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 0, 0);
+            // _vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 0, verts.Length);
+            // _vao.VertexAttributePointer(2, 3, VertexAttribPointerType.Float, 0, verts.Length + txcds.Length);
             
             Console.WriteLine("Buffers done.");
-            
+        }
+        
+        private static void InitBuffers()
+        {
+            var vertexArr = _nuMesh._vertexArr;
+            var texCoordArr = _nuMesh._texCoordArr;
+            var normalArr = _nuMesh._normalArr;
+            var indexList = _nuMesh._indexList;
+        
+            // populate vertex buffer
+            _vertBuffer = new BufferObject<float>(
+                _gl,
+                BufferTargetARB.ArrayBuffer,
+                (nuint) (vertexArr.Length),
+                vertexArr // TODO: CREATE AABB MAX/MIN FOR BOUNDING BOX
+            );
+        
+            // populate normal buffer
+            _normBuffer = new BufferObject<float>(
+                _gl,
+                BufferTargetARB.ArrayBuffer,
+                (nuint) (normalArr.Length),
+                normalArr
+            );
+        
+            // populate texCoord buffer
+            _txcdBuffer = new BufferObject<float>(
+                _gl,
+                BufferTargetARB.ArrayBuffer,
+                (nuint) (texCoordArr.Length),
+                texCoordArr
+            );
+        
+            // populate index buffer
+            _indexBuffer = new BufferObject<uint>(
+                _gl,
+                indexList.ToArray(),
+                BufferTargetARB.ElementArrayBuffer
+            );
+        
+            // create/configure vao
+            // we're using a separate vbo for each attribute
+            _vao = new VertexArrayObject<float, uint>(_gl);
+        
+            // vertex
+            _vertBuffer.Bind();
+            _vao.VertexAttributePointer((uint) 0, 3, VertexAttribPointerType.Float, 0, 0);
+        
+            // tex-coord
+            _txcdBuffer.Bind();
+            _vao.VertexAttributePointer((uint) 1, 3, VertexAttribPointerType.Float, 0, 0);
+        
+            // normal
+            _normBuffer.Bind();
+            _vao.VertexAttributePointer((uint) 2, 3, VertexAttribPointerType.Float, 0, 0);
+        
+            // index
+            _indexBuffer.Bind();
+        
+            // _vao.Unbind();
         }
 
         private static void OnRender(double obj)  //draw each frame
@@ -126,23 +199,39 @@ namespace Bulldog.Core
                 _gl.Enable(EnableCap.DepthTest);
                 _gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
                 
-                //Bind the geometry and shader.
+                // //Bind the geometry and shader.
                 _vao.Bind();
                 _shader.Use();
-            
+
                 //Setting a uniform.
                 //Bind a texture and and set the uTexture0 to use texture0.
                 _texture.Bind(TextureUnit.Texture0);
                 _shader.SetUniform("uTexture0", 0);
                 
-                // var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
-                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(CameraYaw)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(CameraPitch));
-                var view = Matrix4x4.CreateLookAt(CameraPosition, CameraPosition + CameraFront, CameraUp);
-                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CameraZoom), Width / Height, 0.1f, 200.0f);
+                var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(CamProps.CameraYaw)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(CamProps.CameraPitch));
+                var view = Matrix4x4.CreateLookAt(CamProps.CameraPosition, CamProps.CameraPosition + CamProps.CameraFront, CamProps.CameraUp);
+                var projection = Matrix4x4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(CamProps.CameraZoom), Width / Height, 0.1f, 200.0f);
 
-                // _shader.SetUniform("uModel", model);
-                // _shader.SetUniform("uView", view);
-                // _shader.SetUniform("uProjection", projection);
+                _shader.SetUniform("uModel", model);
+                _shader.SetUniform("uView", view);
+                _shader.SetUniform("uProjection", projection);
+                
+                // render every mesh in model
+                foreach (var mesh in _nuMesh._meshData)
+                {
+                    fixed (void* data = mesh.Indices)
+                    {
+                        _gl.DrawElementsBaseVertex(
+                            PrimitiveType.Triangles,
+                            mesh.IndexCount,
+                            GLEnum.UnsignedInt,
+                            data,
+                            mesh.BaseVertex
+                        );
+                    }
+                }
+                
+                // _nuMesh.Render();
 
                 //Draw the geometry.
                 //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
@@ -152,7 +241,7 @@ namespace Bulldog.Core
                 // var difference = 1;
                 //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
                 //_gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
-                _myMesh.Draw(_shader, model, view, projection);
+                // _myMesh.Draw(_shader, model, view, projection);
             }
         }
 
@@ -163,9 +252,9 @@ namespace Bulldog.Core
 
         private static void OnClose()
         {
-            _vbo.Dispose();
-            _ebo.Dispose();
-            _vao.Dispose();
+            // _vbo.Dispose();
+            // _ebo.Dispose();
+            // _vao.Dispose();
         }
         
         private static void KeyDown(IKeyboard arg1, Key key, int arg3)
@@ -179,22 +268,22 @@ namespace Bulldog.Core
             switch (key)
             {
                 case Key.W:
-                    CameraPitch += CameraRotateSpeed;
+                    CamProps.CameraPitch += CamProps.CameraRotateSpeed;
                     break;
                 case Key.S:
-                    CameraPitch -= CameraRotateSpeed;
+                    CamProps.CameraPitch -= CamProps.CameraRotateSpeed;
                     break;
                 case Key.A:
-                    CameraYaw += CameraRotateSpeed;
+                    CamProps.CameraYaw += CamProps.CameraRotateSpeed;
                     break;
                 case Key.D:
-                    CameraYaw -= CameraRotateSpeed;
+                    CamProps.CameraYaw -= CamProps.CameraRotateSpeed;
                     break;
                 case Key.F:
-                    CameraPosition.Z += CameraTranslateSpeed;
+                    CamProps.CameraPosition.Z += CamProps.CameraTranslateSpeed;
                     break;
                 case Key.R:
-                    CameraPosition.Z -= CameraTranslateSpeed;
+                    CamProps.CameraPosition.Z -= CamProps.CameraTranslateSpeed;
                     break;
             }
         }

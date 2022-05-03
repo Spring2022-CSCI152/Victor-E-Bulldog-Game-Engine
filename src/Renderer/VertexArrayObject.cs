@@ -32,6 +32,18 @@ namespace Bulldog.Renderer
             Bind();
         }
 
+        public VertexArrayObject(GL gl, List<BufferObject<TVertexType>> vboList, BufferObject<TIndexType> ebo)
+        {
+            _gl = gl;
+            _handle = _gl.GenVertexArray();
+            Bind();
+            foreach (var vbo in vboList)
+            {
+                vbo.Bind();
+            }
+            ebo.Bind();
+        }
+
         /// <summary>
         /// Defines an array of generic vertex attribute data.
         /// </summary>
@@ -49,6 +61,11 @@ namespace Bulldog.Renderer
         public void Bind()
         {
             _gl.BindVertexArray(_handle);
+        }
+
+        public void Unbind()
+        {
+            _gl.BindVertexArray(0);
         }
 
         public void Dispose()
