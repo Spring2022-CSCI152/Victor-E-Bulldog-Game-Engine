@@ -16,3 +16,7 @@ public enum LightingType
     Spot = 2,
     SoftSpot = 3
 }
+
+public enum Axis{
+    X, Y ,Z
+}
