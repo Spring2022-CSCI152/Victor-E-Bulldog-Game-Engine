@@ -1,10 +1,10 @@
 using Bulldog.Renderer;
 
-namespace Bulldog.ECS.Componets;
+namespace Bulldog.ECS.Components;
 
-public struct Mesh
+public class Mesh : Component
 {
     public VertexArrayObject<float, uint> Vao;
-    //public Texture Texture;
+    public Texture Texture;
     public Shader Shader;
 }
