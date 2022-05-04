@@ -65,6 +65,10 @@
             "SixLabors.ImageSharp": {
               "target": "Package",
               "version": "[1.0.4, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.4.2-pre.12, )"
             }
           },
           "imports": [

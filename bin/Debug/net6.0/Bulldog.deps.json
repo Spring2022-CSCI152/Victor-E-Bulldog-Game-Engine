@@ -12,7 +12,9 @@
           "Microsoft.NETFramework.ReferenceAssemblies": "1.0.2",
           "Silk.NET": "2.13.0",
           "Silk.NET.Core": "2.13.0",
-          "SixLabors.ImageSharp": "1.0.4"
+          "SixLabors.Core": "1.0.0-beta0008",
+          "SixLabors.ImageSharp": "1.0.4",
+          "xunit": "2.4.2-pre.12"
         },
         "runtime": {
           "Bulldog.dll": {}
@@ -364,6 +366,17 @@
           "lib/net6.0/Silk.NET.Windowing.Sdl.dll": {
             "assemblyVersion": "2.13.0.0",
             "fileVersion": "2.13.0.0"
+          }
+        }
+      },
+      "SixLabors.Core/1.0.0-beta0008": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/SixLabors.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -978,6 +991,63 @@
             "fileVersion": "2.0.14.0"
           }
         }
+      },
+      "xunit/2.4.2-pre.12": {
+        "dependencies": {
+          "xunit.analyzers": "0.10.0",
+          "xunit.assert": "2.4.2-pre.12",
+          "xunit.core": "2.4.2-pre.12"
+        }
+      },
+      "xunit.abstractions/2.0.3": {
+        "runtime": {
+          "lib/netstandard2.0/xunit.abstractions.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "xunit.analyzers/0.10.0": {},
+      "xunit.assert/2.4.2-pre.12": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1"
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.assert.dll": {
+            "assemblyVersion": "2.4.2.0",
+            "fileVersion": "2.4.2.0"
+          }
+        }
+      },
+      "xunit.core/2.4.2-pre.12": {
+        "dependencies": {
+          "xunit.extensibility.core": "2.4.2-pre.12",
+          "xunit.extensibility.execution": "2.4.2-pre.12"
+        }
+      },
+      "xunit.extensibility.core/2.4.2-pre.12": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "xunit.abstractions": "2.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.core.dll": {
+            "assemblyVersion": "2.4.2.0",
+            "fileVersion": "2.4.2.0"
+          }
+        }
+      },
+      "xunit.extensibility.execution/2.4.2-pre.12": {
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "xunit.extensibility.core": "2.4.2-pre.12"
+        },
+        "runtime": {
+          "lib/netstandard1.1/xunit.execution.dotnet.dll": {
+            "assemblyVersion": "2.4.2.0",
+            "fileVersion": "2.4.2.0"
+          }
+        }
       }
     }
   },
@@ -1280,6 +1350,13 @@
       "sha512": "sha512-S1lE9dgy0Iae2paj4IA2F5jP8ofpGsmc6aDR1CaV0SApuQb3btxPTsZrk261eI0FTfkZktBzaFL7cQeFHex6YQ==",
       "path": "silk.net.windowing.sdl/2.13.0",
       "hashPath": "silk.net.windowing.sdl.2.13.0.nupkg.sha512"
+    },
+    "SixLabors.Core/1.0.0-beta0008": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rrKPDN107tVOh+mUoNh+kHELa7WfYZREPPbYdiKJ3Rd6dex/UgDWDGBOjPJn4BBhmts/VGuaXMXyfT/BwiuH2g==",
+      "path": "sixlabors.core/1.0.0-beta0008",
+      "hashPath": "sixlabors.core.1.0.0-beta0008.nupkg.sha512"
     },
     "SixLabors.ImageSharp/1.0.4": {
       "type": "package",
@@ -1693,6 +1770,55 @@
       "sha512": "sha512-pqhYzaFfEXGCZag7JsO3YoNHYALBqFHu4a3Ejyz5rjPW51p3Tfjs82Cz8n9GkohzJADZxSRthNYWpa3Hi1Vp6g==",
       "path": "ultz.native.sdl/2.0.14.1",
       "hashPath": "ultz.native.sdl.2.0.14.1.nupkg.sha512"
+    },
+    "xunit/2.4.2-pre.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FlZ/r9WdIy8x/0oF9mpWepkspYi+5e9YmKZfkxKFgEI6G8T3GC9mntYVI515FyXzQ584xPMrcv0b9Orx6MXa9g==",
+      "path": "xunit/2.4.2-pre.12",
+      "hashPath": "xunit.2.4.2-pre.12.nupkg.sha512"
+    },
+    "xunit.abstractions/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pot1I4YOxlWjIb5jmwvvQNbTrZ3lJQ+jUGkGjWE3hEFM0l5gOnBWS+H3qsex68s5cO52g+44vpGzhAt+42vwKg==",
+      "path": "xunit.abstractions/2.0.3",
+      "hashPath": "xunit.abstractions.2.0.3.nupkg.sha512"
+    },
+    "xunit.analyzers/0.10.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4/IDFCJfIeg6bix9apmUtIMwvOsiwqdEexeO/R2D4GReIGPLIRODTpId/l4LRSrAJk9lEO3Zx1H0Zx6uohJDNg==",
+      "path": "xunit.analyzers/0.10.0",
+      "hashPath": "xunit.analyzers.0.10.0.nupkg.sha512"
+    },
+    "xunit.assert/2.4.2-pre.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Av98kBp3Uc6eI1lWvGIVWrCWQHOSVKr/rI4VVc9yok1/xqk43RESH5IcYTOHEdiof37K7bzNfv4qaY/dwNMqIw==",
+      "path": "xunit.assert/2.4.2-pre.12",
+      "hashPath": "xunit.assert.2.4.2-pre.12.nupkg.sha512"
+    },
+    "xunit.core/2.4.2-pre.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0IKhUb1qivtZUQyWl3fQeqbwsKgo4Ndi9ECJ6S5GFb9l8Tr1T5wTPo3KaCOD9ccxRu4jOQmvm9c8fCQd7SyoZg==",
+      "path": "xunit.core/2.4.2-pre.12",
+      "hashPath": "xunit.core.2.4.2-pre.12.nupkg.sha512"
+    },
+    "xunit.extensibility.core/2.4.2-pre.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z6ufPlcGpOEe/GNGAgfwtloAsb8mXuu4X6cBID8dsiTJ0OhD33mU/qkobnlFQVP724rYkFvtiVAjD47CpFFdiQ==",
+      "path": "xunit.extensibility.core/2.4.2-pre.12",
+      "hashPath": "xunit.extensibility.core.2.4.2-pre.12.nupkg.sha512"
+    },
+    "xunit.extensibility.execution/2.4.2-pre.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FBuMA84KNxBMgHLVAqMGVD6DeejjPFTahZgxBClvey+C/HZipeuzKNX6x7Ne/Updpevz2KqituBJJ8yz9TrKbQ==",
+      "path": "xunit.extensibility.execution/2.4.2-pre.12",
+      "hashPath": "xunit.extensibility.execution.2.4.2-pre.12.nupkg.sha512"
     }
   }
 }
