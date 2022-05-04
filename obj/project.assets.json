@@ -524,6 +524,18 @@
           "lib/net6.0/Silk.NET.Windowing.Sdl.dll": {}
         }
       },
+      "SixLabors.Core/1.0.0-beta0008": {
+        "type": "package",
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.5.1"
+        },
+        "compile": {
+          "lib/netcoreapp2.1/SixLabors.Core.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/SixLabors.Core.dll": {}
+        }
+      },
       "SixLabors.ImageSharp/1.0.4": {
         "type": "package",
         "compile": {
@@ -2350,6 +2362,25 @@
         "silk.net.windowing.sdl.2.13.0.nupkg.sha512",
         "silk.net.windowing.sdl.nuspec",
         "silkdotnet_v3.png"
+      ]
+    },
+    "SixLabors.Core/1.0.0-beta0008": {
+      "sha512": "rrKPDN107tVOh+mUoNh+kHELa7WfYZREPPbYdiKJ3Rd6dex/UgDWDGBOjPJn4BBhmts/VGuaXMXyfT/BwiuH2g==",
+      "type": "package",
+      "path": "sixlabors.core/1.0.0-beta0008",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netcoreapp2.0/SixLabors.Core.dll",
+        "lib/netcoreapp2.0/SixLabors.Core.xml",
+        "lib/netcoreapp2.1/SixLabors.Core.dll",
+        "lib/netcoreapp2.1/SixLabors.Core.xml",
+        "lib/netstandard1.3/SixLabors.Core.dll",
+        "lib/netstandard1.3/SixLabors.Core.xml",
+        "lib/netstandard2.0/SixLabors.Core.dll",
+        "lib/netstandard2.0/SixLabors.Core.xml",
+        "sixlabors.core.1.0.0-beta0008.nupkg.sha512",
+        "sixlabors.core.nuspec"
       ]
     },
     "SixLabors.ImageSharp/1.0.4": {
@@ -5494,28 +5525,31 @@
       "Microsoft.NETFramework.ReferenceAssemblies >= 1.0.2",
       "Silk.NET >= 2.13.0",
       "Silk.NET.Core >= 2.13.0",
+      "SixLabors.Core >= 1.0.0-beta0008",
       "SixLabors.ImageSharp >= 1.0.4"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\harpi\\.nuget\\packages\\": {}
+    "C:\\Users\\salam\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\harpi\\RiderProjects\\Team1\\Bulldog.csproj",
+      "projectUniqueName": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
       "projectName": "Bulldog",
-      "projectPath": "C:\\Users\\harpi\\RiderProjects\\Team1\\Bulldog.csproj",
-      "packagesPath": "C:\\Users\\harpi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\harpi\\RiderProjects\\Team1\\obj\\",
+      "projectPath": "C:\\Users\\salam\\RiderProjects\\Team1\\Bulldog.csproj",
+      "packagesPath": "C:\\Users\\salam\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\salam\\RiderProjects\\Team1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\harpi\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\salam\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -5552,6 +5586,10 @@
             "target": "Package",
             "version": "[2.13.0, )"
           },
+          "SixLabors.Core": {
+            "target": "Package",
+            "version": "[1.0.0-beta0008, )"
+          },
           "SixLabors.ImageSharp": {
             "target": "Package",
             "version": "[1.0.4, )"
@@ -5572,7 +5610,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
