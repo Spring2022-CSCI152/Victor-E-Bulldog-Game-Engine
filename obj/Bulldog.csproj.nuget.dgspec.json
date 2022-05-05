@@ -44,11 +44,19 @@
               "target": "Package",
               "version": "[4.1.0, )"
             },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.1.0, )"
+            },
             "Microsoft.NETFramework.ReferenceAssemblies": {
               "suppressParent": "All",
               "target": "Package",
               "version": "[1.0.2, )",
               "autoReferenced": true
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.17.2, )"
             },
             "Silk.NET": {
               "target": "Package",
@@ -69,6 +77,12 @@
             "xunit": {
               "target": "Package",
               "version": "[2.4.2-pre.12, )"
+            },
+            "xunit.runner.visualstudio": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.4.1, )"
             }
           },
           "imports": [

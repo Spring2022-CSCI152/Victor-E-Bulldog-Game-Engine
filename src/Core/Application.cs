@@ -44,7 +44,7 @@ namespace Bulldog.Core
         //Used to track change in mouse movement to allow for moving of the Camera
         private static Vector2 LastMousePosition;
 
-        private static void Main()
+        private static void main()
         {
             var options = WindowOptions.Default;
             options.Size = new Vector2D<int>(800, 600);

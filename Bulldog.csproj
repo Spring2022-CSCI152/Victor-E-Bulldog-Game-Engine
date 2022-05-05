@@ -9,11 +9,17 @@
 
     <ItemGroup>
       <PackageReference Include="AssimpNet" Version="4.1.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+      <PackageReference Include="Moq" Version="4.17.2" />
       <PackageReference Include="Silk.NET" Version="2.13.0" />
       <PackageReference Include="Silk.NET.Core" Version="2.13.0" />
       <PackageReference Include="SixLabors.Core" Version="1.0.0-beta0008" />
       <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
       <PackageReference Include="xunit" Version="2.4.2-pre.12" />
+      <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

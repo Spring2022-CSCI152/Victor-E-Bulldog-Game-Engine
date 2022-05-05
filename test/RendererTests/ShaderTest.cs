@@ -1,19 +1,21 @@
-﻿using Bulldog.Renderer;
+﻿using Moq;
+using Silk.NET.OpenGL;
+using Shader = Bulldog.Renderer.Shader;
 
 namespace Bulldog.test.RendererTests;
 using Xunit;
 
 public class ShaderTest
 {
-    private readonly Shader _sut;
+    private readonly Mock<Shader> _sut;
 
     public ShaderTest()
     {
-        //_sut = new Shader();
+        _sut = new Mock<Shader>();
     }
 
     [Fact]
-    public void MakeShader()
+    public void TestSetUniform()
     {
         
     }
