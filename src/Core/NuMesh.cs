@@ -19,40 +19,48 @@ public class NuMesh
     public List<MeshDataStruct> _meshData = new List<MeshDataStruct>();
     
     // temporary containers
-    private List<Vector3D> _vertexList = new List<Vector3D>();
-    private List<Vector3D> _normalList = new List<Vector3D>();
-    private List<Vector3D> _texCoordList = new List<Vector3D>();
-    public List<uint> _indexList = new List<uint>();
+    private readonly List<Vector3D> _vertexList = new List<Vector3D>();
+    private readonly List<Vector3D> _normalList = new List<Vector3D>();
+    private readonly List<Vector3D> _texCoordList = new List<Vector3D>();
+    private readonly List<uint> _indexList = new List<uint>();
+    
+    // public containers
     public float[] _vertexArr;
     public float[] _normalArr;
     public float[] _texCoordArr;
+    public uint[] _indexArr;
     
     // model buffers
     private VertexArrayObject<float, uint> _vao;
-    private List<BufferObject<float>> _bufferList;
-    // private BufferObject<float> _vertBuffer;
-    // private BufferObject<float> _normBuffer;
-    // private BufferObject<float> _txcdBuffer;
+    // private List<BufferObject<float>> _bufferList;
+    private BufferObject<float> _vertBuffer;
+    private BufferObject<float> _normBuffer;
+    private BufferObject<float> _txcdBuffer;
     private BufferObject<uint> _indexBuffer;
 
+    // defines buffer types
     enum BufferType
     {
         VertexBuffer = 0,
         TexCoordBuffer = 1,
         NormalBuffer = 2,
-        IndexBuffer = 3,
-        NumBuffers = 4
+        NumBuffers = 3
     }
     
+    // holds supplemental mesh data
     public struct MeshDataStruct
     {
         public uint IndexCount;
         public uint[] Indices;
         public int BaseVertex;
-        // public uint BaseIndex;
+        public uint BaseIndex;
         // Texture _tex;
     }
 
+    
+    
+    
+    // constructor
     public NuMesh(GL gl, string path)
     {
         // TODO: make LoadMeshes its own class
@@ -66,50 +74,57 @@ public class NuMesh
         // init assimp
         var importer = new AssimpContext();
         importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
-        
+
         // load model with assimp
-        _model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
-        var result = _model != null ? $"{path} loaded successfully." : $"FAILED TO LOAD: {path}";
-        Console.WriteLine(result);
-        
-        // parse assimp mesh data
-        if (_model != null)
+        try
         {
-            int currVertexCount = 0;
-            // load each mesh in model
-            foreach (var mesh in _model.Meshes)
+            // assimp loads model into _model
+            _model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
+            var result = _model != null ? $"{path} loaded successfully." : $"FAILED TO LOAD: {path}";
+            Console.WriteLine(result);
+
+            // parse assimp mesh data
+            if (_model != null)
             {
-                LoadSingleMesh(mesh, currVertexCount);
-                currVertexCount += mesh.VertexCount;
+                int currVertexCount = 0;
+                uint currIndexCount = 0;
+
+                // load each mesh in model
+                // foreach (var mesh in _model.Meshes)
+                for (int i = 0; i < _model.MeshCount; i++)
+                {
+                    LoadSingleMesh(_model.Meshes[i], currVertexCount, currIndexCount);
+                    
+                    currVertexCount += _model.Meshes[i].VertexCount;
+                    currIndexCount += _meshData[i].IndexCount;
+                }
+
+                // convert lists to public arrays
+                _vertexArr = ExtractDataFromFloatVectorList(_vertexList).ToArray();
+                _texCoordArr = ExtractDataFromFloatVectorList(_texCoordList).ToArray();
+                _normalArr = ExtractDataFromFloatVectorList(_normalList).ToArray();
+                _indexArr = _indexList.ToArray();
             }
 
-            _vertexArr = ExtractDataFromFloatVectorList(_vertexList).ToArray();
-            _texCoordArr = ExtractDataFromFloatVectorList(_texCoordList).ToArray();
-            _normalArr = ExtractDataFromFloatVectorList(_normalList).ToArray();
+            // print error if model didn't load
+            else { Console.WriteLine("NuMesh failed to load model: " + path); }
         }
-        
-        // print error if model didn't load
-        else
+        catch (Exception e)
         {
-            Console.WriteLine("NuMesh failed to load model: " + path);
+            Console.WriteLine("Exception: NuMesh failed to load model: " + e);
+            throw;
         }
     }
 
-    private void LoadSingleMesh(Assimp.Mesh singleMesh, int currVertexCount)
+    private void LoadSingleMesh(Assimp.Mesh singleMesh, int currVertexCount, uint currIndexCount)
     {
         // init supplemental data
         var currMeshData = new MeshDataStruct();
         
         // add this mesh's vertices to list
-        if (singleMesh.HasNormals)
+        if (singleMesh.HasVertices)
         {
             _vertexList.AddRange(singleMesh.Vertices);
-        }
-        
-        // add this mesh's normals to list
-        if (singleMesh.HasNormals)
-        {
-            _normalList.AddRange(singleMesh.Normals);
         }
         
         // add this mesh's tex-coords to list
@@ -118,71 +133,82 @@ public class NuMesh
             _texCoordList.AddRange(singleMesh.TextureCoordinateChannels[0]);
         }
         
+        // add this mesh's normals to list
+        if (singleMesh.HasNormals)
+        {
+            _normalList.AddRange(singleMesh.Normals);
+        }
+        
         // add this mesh's indices to list
         var indexList = singleMesh.GetUnsignedIndices();
         _indexList.AddRange(indexList);
         
         // set supplemental data
         currMeshData.IndexCount = (uint) indexList.Length;
-        currMeshData.Indices = indexList;
         currMeshData.BaseVertex = currVertexCount;
+        currMeshData.BaseIndex = currIndexCount;
+        currMeshData.Indices = indexList;
         _meshData.Add(currMeshData);
     }
     
     private void InitBuffers()
     {
         // populate vertex buffer
-        // _vertBuffer = new BufferObject<float>(
-        _bufferList[(int)BufferType.VertexBuffer] = new BufferObject<float>(
+        // _bufferList[(int)BufferType.VertexBuffer] = new BufferObject<float>(
+        _vertBuffer = new BufferObject<float>(
             _gl,
             BufferTargetARB.ArrayBuffer,
-            (nuint)(_vertexList.Count),
+            (nuint)_vertexArr.Length,
             _vertexArr // TODO: CREATE AABB MAX/MIN FOR BOUNDING BOX
         );
         
         // populate texCoord buffer
-        // _txcdBuffer = new BufferObject<float>(
-        _bufferList[(int)BufferType.TexCoordBuffer] = new BufferObject<float>(
+        // _bufferList[(int)BufferType.TexCoordBuffer] = new BufferObject<float>(
+        _txcdBuffer = new BufferObject<float>(
             _gl,
             BufferTargetARB.ArrayBuffer,
-            (nuint)(_texCoordList.Count),
+            (nuint)_texCoordArr.Length,
             _texCoordArr
         );
         
         // populate normal buffer
-        // _normBuffer = new BufferObject<float>(
-        _bufferList[(int)BufferType.NormalBuffer] = new BufferObject<float>(
+        // _bufferList[(int)BufferType.NormalBuffer] = new BufferObject<float>(
+        _normBuffer = new BufferObject<float>(
             _gl,
             BufferTargetARB.ArrayBuffer,
-            (nuint)(_normalList.Count),
+            (nuint)_normalArr.Length,
             _normalArr
         );
         
         // populate index buffer
         _indexBuffer = new BufferObject<uint>(
             _gl,
-            _indexList.ToArray(),
-            BufferTargetARB.ElementArrayBuffer
+            BufferTargetARB.ElementArrayBuffer,
+            (nuint)_indexArr.Length,
+            _indexArr
         );
 
         // create/configure vao
         // we're using a separate vbo for each attribute
-        _vao = new VertexArrayObject<float, uint>(_gl, _bufferList, _indexBuffer);
+        _vao = new VertexArrayObject<float, uint>(_gl);
         
         // vertex
-        _bufferList[(int)BufferType.VertexBuffer].Bind();
+        // _bufferList[(int)BufferType.VertexBuffer].Bind();
+        _vertBuffer.Bind();
         _vao.VertexAttributePointer((uint)BufferType.VertexBuffer, 3, VertexAttribPointerType.Float, 0, 0);
         
         // tex-coord
-        _bufferList[(int)BufferType.TexCoordBuffer].Bind();
+        // _bufferList[(int)BufferType.TexCoordBuffer].Bind();
+        _txcdBuffer.Bind();
         _vao.VertexAttributePointer((uint)BufferType.TexCoordBuffer, 3, VertexAttribPointerType.Float, 0, 0);
         
         // normal
-        _bufferList[(int)BufferType.NormalBuffer].Bind();
+        // _bufferList[(int)BufferType.NormalBuffer].Bind();
+        _normBuffer.Bind();
         _vao.VertexAttributePointer((uint)BufferType.NormalBuffer, 3, VertexAttribPointerType.Float, 0, 0);
         
         // index
-        _indexBuffer.Bind(); // NOTE: possibly unneeded
+        _indexBuffer.Bind();
         
         _vao.Unbind();
     }
@@ -208,9 +234,12 @@ public class NuMesh
         return temp.ToArray();
     }
     
+    
+    // renders the model
     public unsafe void Render()
     {
         _vao.Bind();
+        
         // render every mesh in model
         foreach (var mesh in _meshData)
         {
@@ -225,18 +254,19 @@ public class NuMesh
                 );
             }
         }
-        // _vao.Unbind();
+        
+        _vao.Unbind();
     }
 
     public void Dispose()
     {
-        // _vertBuffer.Dispose();
-        // _normBuffer.Dispose();
-        // _txcdBuffer.Dispose();
-        foreach (var vbo in _bufferList)
-        {
-            vbo.Dispose();
-        }
+        _vertBuffer.Dispose();
+        _normBuffer.Dispose();
+        _txcdBuffer.Dispose();
+        // foreach (var vbo in _bufferList)
+        // {
+        //     vbo.Dispose();
+        // }
         _indexBuffer.Dispose();
         _vao.Dispose();
     }

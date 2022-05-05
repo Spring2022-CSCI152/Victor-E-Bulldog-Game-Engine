@@ -31,8 +31,10 @@ namespace Bulldog.Core
         // mesh
         // private static ObjLoader _myObj;
         // private static Mesh _myMesh;
-        private static NuMesh _nuMesh;
+        // private static NuMesh _nuMesh;
+        private static ModelLoader _modelLoader;
 
+        // file paths
         private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
         private const string TexturePath = "../../../src/Scene/uv-test.png";
@@ -95,7 +97,8 @@ namespace Bulldog.Core
             Console.WriteLine("Shaders Done.");
             
             // load model
-            _nuMesh = new NuMesh(_gl, ObjPath);
+            // _nuMesh = new NuMesh(_gl, ObjPath);
+            _modelLoader = new ModelLoader(ObjPath);
             
             //Load texture
             _texture = new Texture(_gl, TexturePath);
@@ -134,24 +137,24 @@ namespace Bulldog.Core
         
         private static void InitBuffers()
         {
-            var vertexArr = _nuMesh._vertexArr;
-            var texCoordArr = _nuMesh._texCoordArr;
-            var normalArr = _nuMesh._normalArr;
-            var indexList = _nuMesh._indexList;
+            var vertexArr = _modelLoader.Vertices;
+            var texCoordArr = _modelLoader.TexCoords;
+            var normalArr = _modelLoader.Normals;
+            var indexArr = _modelLoader.Indices;
         
             // populate vertex buffer
             _vertBuffer = new BufferObject<float>(
                 _gl,
                 BufferTargetARB.ArrayBuffer,
-                (nuint) (vertexArr.Length),
-                vertexArr // TODO: CREATE AABB MAX/MIN FOR BOUNDING BOX
+                (nuint)vertexArr.Length,
+                vertexArr
             );
         
             // populate normal buffer
             _normBuffer = new BufferObject<float>(
                 _gl,
                 BufferTargetARB.ArrayBuffer,
-                (nuint) (normalArr.Length),
+                (nuint)normalArr.Length,
                 normalArr
             );
         
@@ -159,15 +162,16 @@ namespace Bulldog.Core
             _txcdBuffer = new BufferObject<float>(
                 _gl,
                 BufferTargetARB.ArrayBuffer,
-                (nuint) (texCoordArr.Length),
+                (nuint)texCoordArr.Length,
                 texCoordArr
             );
         
             // populate index buffer
             _indexBuffer = new BufferObject<uint>(
                 _gl,
-                indexList.ToArray(),
-                BufferTargetARB.ElementArrayBuffer
+                BufferTargetARB.ElementArrayBuffer,
+                (nuint)indexArr.Length,
+                indexArr
             );
         
             // create/configure vao
@@ -176,20 +180,20 @@ namespace Bulldog.Core
         
             // vertex
             _vertBuffer.Bind();
-            _vao.VertexAttributePointer((uint) 0, 3, VertexAttribPointerType.Float, 0, 0);
+            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 0, 0);
         
             // tex-coord
             _txcdBuffer.Bind();
-            _vao.VertexAttributePointer((uint) 1, 3, VertexAttribPointerType.Float, 0, 0);
+            _vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 0, 0);
         
             // normal
             _normBuffer.Bind();
-            _vao.VertexAttributePointer((uint) 2, 3, VertexAttribPointerType.Float, 0, 0);
+            _vao.VertexAttributePointer(2, 3, VertexAttribPointerType.Float, 0, 0);
         
             // index
             _indexBuffer.Bind();
         
-            // _vao.Unbind();
+            _vao.Unbind();
         }
 
         private static void OnRender(double obj)  //draw each frame
@@ -217,7 +221,7 @@ namespace Bulldog.Core
                 _shader.SetUniform("uProjection", projection);
                 
                 // render every mesh in model
-                foreach (var mesh in _nuMesh._meshData)
+                foreach (var mesh in _modelLoader.MeshDataList)
                 {
                     fixed (void* data = mesh.Indices)
                     {
