@@ -38,9 +38,9 @@ namespace Bulldog.Core
         private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
         private const string TexturePath = "../../../src/Scene/uv-test.png";
-        private const string ObjPath = "../../../res/index-testing.obj";
+        // private const string ObjPath = "../../../res/index-testing.obj";
         // private const string ObjPath = "../../../src/Scene/suzanne.obj";
-        // private const string ObjPath = "../../../res/CLASSROOM.obj";
+        private const string ObjPath = "../../../res/CLASSROOM.obj";
         // private const string ObjPath = "../../../res/SuzanneTri.obj";
         // private const string ObjPath = "../../../res/CupOBJ/Cup.obj";
 
@@ -223,16 +223,13 @@ namespace Bulldog.Core
                 // render every mesh in model
                 foreach (var mesh in _modelLoader.MeshDataList)
                 {
-                    fixed (void* data = mesh.Indices)
-                    {
-                        _gl.DrawElementsBaseVertex(
-                            PrimitiveType.Triangles,
-                            mesh.IndexCount,
-                            GLEnum.UnsignedInt,
-                            data,
-                            mesh.BaseVertex
-                        );
-                    }
+                    _gl.DrawElementsBaseVertex(
+                        PrimitiveType.Triangles,
+                        mesh.IndexCount,
+                        GLEnum.UnsignedInt,
+                        (void*)(sizeof(uint) * mesh.BaseIndex),
+                        (int)mesh.BaseVertex
+                    );
                 }
                 
                 // _nuMesh.Render();
