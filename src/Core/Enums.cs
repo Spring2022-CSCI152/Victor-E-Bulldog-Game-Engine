@@ -2,6 +2,9 @@ namespace Bulldog.Core;
 
 public enum RenderTarget
 {
+    Deferred,
+    Forward,
+    
 }
 
 public enum TextureTarget
