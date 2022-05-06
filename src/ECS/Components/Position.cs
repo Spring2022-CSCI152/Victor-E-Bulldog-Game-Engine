@@ -1,6 +1,6 @@
 using Bulldog.ECS.Systems;
 using Silk.NET.Maths;
-namespace Bulldog.ECS.Componets;
+namespace Bulldog.ECS.Components;
 
 public class Position : Component
 {

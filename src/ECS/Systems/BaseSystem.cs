@@ -2,7 +2,7 @@ namespace Bulldog.ECS.Systems
 {
     public abstract class BaseSystem : ECSObject {
         private readonly string[] RequireComponentNames;
-        protected Entity CurrentEntity { get; private set; }
+        protected Entity CurrentEntity { get; set; }
 
         public BaseSystem(params string[] requireComponentNames) {
             RequireComponentNames = requireComponentNames;

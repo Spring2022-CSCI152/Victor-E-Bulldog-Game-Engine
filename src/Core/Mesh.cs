@@ -12,7 +12,7 @@ public class Mesh
     private readonly float[] _txcds;
     private readonly float[] _norms;
     private readonly uint[] _indices;
-    private List<Texture> _textures = new List<Texture>();
+    private List<Texture> _textures;
 
     // ReSharper disable once InconsistentNaming
     private static VertexArrayObject<float, uint> Vao;
@@ -43,12 +43,13 @@ public class Mesh
         _txcds = path.TexCoords;
         _norms = path.Normals;
         _indices = path.Indices;
+        _textures = new List<Texture>();
         _textures.Add(textureIn);
         // now that we have all the required data, set the vertex buffers and its attribute pointers.
         Init();
     }
 
-    public void Draw(Renderer.Shader shader)
+    public void Draw(Renderer.Shader shader, Texture textureIn)
     {
         unsafe
         {
@@ -57,7 +58,7 @@ public class Mesh
             
             //Setting a uniform.
             //Bind a texture and and set the uTexture0 to use texture0.
-            _textures[0].Bind();
+            textureIn.Bind();
             shader.SetUniform("uTexture0", 0);
             
             //Draw the geometry.

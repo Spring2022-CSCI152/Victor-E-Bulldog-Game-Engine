@@ -1,7 +1,7 @@
 namespace Bulldog.ECS;
 using System.Collections.Generic;
 using System.Diagnostics;
-// ReSharper disable once InconsistentNaming
+// ReSharper disable InconsistentNaming
 public abstract class ECSObject {
     public readonly string UID;
     public string Name;
@@ -13,11 +13,9 @@ public abstract class ECSObject {
 }
 
 static class Helper {
-    // ReSharper disable once InconsistentNaming
     public static string CreateUID() {
         return Guid.NewGuid().ToString("N");
     }
-    // ReSharper disable once InconsistentNaming
     public static bool CheckExistUID<T, K>(List<T> list, T item, K owner) where T : ECSObject where K : ECSObject {
         if(list.Count == 0)
             return false;

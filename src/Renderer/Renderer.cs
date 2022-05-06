@@ -1,7 +1,9 @@
 using System.Numerics;
 using Bulldog.Core;
+using Bulldog.ECS;
 using Bulldog.Utils;
 using Silk.NET.OpenGL;
+using Bulldog.ECS.Components;
 
 namespace Bulldog.Renderer;
 
@@ -12,6 +14,7 @@ public class Renderer
 
     private void DrawDeferred(GL gl,float difference,float height, float width,Camera camera, Shader geometryPassShader)
     {
+        gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
         gl.BindFramebuffer(FramebufferTarget.Framebuffer, GBuffer.FBO);
         var model = Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(difference)) * Matrix4x4.CreateRotationX(MathHelper.DegreesToRadians(difference));
         var view = Matrix4x4.CreateLookAt(camera.Position, camera.Position + camera.Front, camera.Up);
@@ -29,14 +32,28 @@ public class Renderer
         // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
         gl.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
     }
-    private void DrawForward(){}
+
+    public void DrawForward(GL gl, World world)
+    {
+        unsafe
+        {
+            gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            gl.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            world.Draw();
+            //Draw the geometry.
+            //_gl.DrawElements(PrimitiveType.Triangles, (uint) TestQuad.Indices.Length, DrawElementsType.UnsignedInt, null);
+        }
+    }
     
     private void CalculateLightingDeferred(){}
     private void CalculateLightingForward(){}
 
     private void CalculateShadowsDeferred(){}
     private void CalculateShadowForward(){}
-    
-    public void DrawAll(){}
+
+    public void DrawAll(World world)
+    {
+        
+    }
     
 }

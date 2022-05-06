@@ -1,27 +1,33 @@
 using System.Numerics;
-using Bulldog.core;
-using Bulldog.Utils;
+using Bulldog.ECS;
+using Bulldog.ECS.Components;
+using Bulldog.ECS.Systems;
+using Bulldog.Renderer;
 using Silk.NET.Input;
 using Silk.NET.Maths;
-using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
+using Silk.NET.OpenGL;
 using Shader = Bulldog.Renderer.Shader;
+using Bulldog.Utils;
+using Mesh = Bulldog.core.Mesh;
 using Texture = Bulldog.Renderer.Texture;
 
 namespace Bulldog.Core
 {
     class Program
     {
-        private static IWindow Window;
-        private static GL Gl;
-        private static IKeyboard PrimaryKeyboard;
+        private static IWindow _window;
+        private static GL _gl;
+        private static IKeyboard primaryKeyboard;
         private const int Width = 800;
         private const int Height = 700;
-        private static Texture Texture;
-        private static Shader Shader;
+        private static BufferObject<float> _vbo;
+        private static BufferObject<uint> _ebo;
+        private static VertexArrayObject<float, uint> _vao;
+        private static Texture _texture;
+        private static Shader _shader;
         // mesh
-        private static ObjLoader MyObj;
-        private static Mesh MyMesh;
+        private static ObjLoader _myObj;
 
         private const string VertShaderSourcePath = "../../../src/Core/shader.vert";
         private const string FragShaderSourcePath = "../../../src/Core/shader.frag";
@@ -31,6 +37,7 @@ namespace Bulldog.Core
         //Setup the camera's location, directions, and movement speed
         private static Camera Camera;
 
+        private static World World;
         //Used to track change in mouse movement to allow for moving of the Camera
         private static Vector2 LastMousePosition;
 
@@ -40,59 +47,104 @@ namespace Bulldog.Core
             options.Size = new Vector2D<int>(800, 600);
             options.Title = "LearnOpenGL with Silk.NET";
             options.PreferredDepthBufferBits = 24;
-            Window = Silk.NET.Windowing.Window.Create(options);
+            _window = Window.Create(options);
 
-            Window.Load += OnLoad;
-            Window.Update += OnUpdate;
-            Window.Render += OnRender;
-            Window.Closing += OnClose;
+            _window.Load += OnLoad;
+            _window.Update += OnUpdate;
+            _window.Render += OnRender;
+            _window.Closing += OnClose;
 
-            Window.Run();
+            _window.Run();
         }
-        
+
+
         private static void OnLoad()
         {
             //Set-up input context.
-            IInputContext input = Window.CreateInput();
+            IInputContext input = _window.CreateInput();
 
             foreach (var keyboard in input.Keyboards)
             {
                 keyboard.KeyDown += KeyDown;
             }
             
+            for (int i = 0; i < input.Mice.Count; i++)
+            {
+                input.Mice[i].Cursor.CursorMode = CursorMode.Raw;
+                input.Mice[i].MouseMove += OnMouseMove;
+                input.Mice[i].Scroll += OnMouseWheel;
+            }
+
+            
             //Getting the opengl api for drawing to the screen.
-            Gl = GL.GetApi(Window);
-            Camera = new Camera();
+            _gl = GL.GetApi(_window);
             
             //Creating a shader.
             Console.WriteLine("Compiling shaders...");
-            Shader = new Shader(Gl, "shader.vert", "shader.frag");
+            _shader = new Shader(_gl, VertShaderSourcePath, FragShaderSourcePath);
             Console.WriteLine("Shaders Done.");
             
             //Load texture
-            Texture = new Texture(Gl, TexturePath);
+            _texture = new Texture(_gl, TexturePath);
             
             // load obj
-            MyObj = new ObjLoader(ObjPath);
-            MyMesh = new Mesh(Gl, MyObj, Texture);
+            _myObj = new ObjLoader(ObjPath);
             
             // create buffers
+            Console.WriteLine("Creating buffers...");
+            var verts = _myObj.Vertices;
+            var txcds = _myObj.TexCoords;
+            var norms = _myObj.Normals;
+            var bufferSize = (nuint) (verts.Length + txcds.Length + norms.Length);
+            // create an empty buffer of proper size
+            _vbo = new BufferObject<float>(_gl, BufferTargetARB.ArrayBuffer, bufferSize, null);
+            // populate buffer with data
+            _vbo.SetSubData(0, verts);
+            _vbo.SetSubData(verts.Length, txcds);
+            _vbo.SetSubData(verts.Length + txcds.Length, norms);
+            // create index buffer
+            _ebo = new BufferObject<uint>(_gl, _myObj.Indices, BufferTargetARB.ElementArrayBuffer);
+            // create _vao to store buffers
+            _vao = new VertexArrayObject<float, uint>(_gl, _vbo, _ebo);
+            // tell _vao how data is organized inside of _vbo
+            _vao.VertexAttributePointer(0, 3, VertexAttribPointerType.Float, 0, 0);
+            _vao.VertexAttributePointer(1, 3, VertexAttribPointerType.Float, 0, verts.Length);
+            _vao.VertexAttributePointer(2, 3, VertexAttribPointerType.Float, 0, verts.Length + txcds.Length);
+            
             Console.WriteLine("Buffers done.");
+            World = new World();
+            World.AddSystem(new RenderSystem());
+            World.CreateEntity("E1",new MeshComponent()
+            {
+                Vao = _vao, Texture = _texture, Shader = _shader, _gl = _gl, Indices = _myObj.Indices
+            });
+            Camera = new Camera(Vector3.UnitZ * 6, Vector3.UnitZ * -1, Vector3.UnitY, Width / Height);
             
         }
+        
 
         private static void OnRender(double obj)  //draw each frame
         {
-            Gl.Enable(EnableCap.DepthTest);
-            Gl.Clear((uint) (ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit));
+            unsafe
+            {
+                _gl.Enable(EnableCap.DepthTest);
 
-            //Bind the geometry and shader.
-            MyMesh.Draw(Shader);
-            //Use elapsed time to convert to radians to allow our cube to rotate over time
-            var difference = (float) (Window.Time * 100);
+                _vao.Bind();
+                _shader.Use();
+                _texture.Bind();
+                
+                _shader.SetUniform("uTexture0", 0);
+                _gl.DrawElements(PrimitiveType.Triangles, (uint) _myObj.Indices.Length, DrawElementsType.UnsignedInt, null);
+                
+                var difference = (float) (_window.Time * 100);
 
-            //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
-            //_gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+                _shader.SetUniform("uModel", Matrix4x4.CreateRotationY(MathHelper.DegreesToRadians(25f)));
+                _shader.SetUniform("uView", Camera.GetViewMatrix());
+                _shader.SetUniform("uProjection", Camera.GetProjectionMatrix());
+
+                //We're drawing with just vertices and no indices, and it takes 36 vertices to have a six-sided textured cube
+                //_gl.DrawArrays(PrimitiveType.Triangles, 0, 36);
+            }
         }
 
         private static void OnUpdate(double obj)
@@ -102,15 +154,36 @@ namespace Bulldog.Core
 
         private static void OnClose()
         {
-            MyMesh.Dispose();
+            _vbo.Dispose();
+            _ebo.Dispose();
+            _vao.Dispose();
         }
         
+        private static unsafe void OnMouseMove(IMouse mouse, Vector2 position)
+        {
+            var lookSensitivity = 0.1f;
+            if (LastMousePosition == default) { LastMousePosition = position; }
+            else
+            {
+                var xOffset = (position.X - LastMousePosition.X) * lookSensitivity;
+                var yOffset = (position.Y - LastMousePosition.Y) * lookSensitivity;
+                LastMousePosition = position;
+
+                Camera.ModifyDirection(xOffset, yOffset);
+            }
+        }
+
+        private static unsafe void OnMouseWheel(IMouse mouse, ScrollWheel scrollWheel)
+        {
+            Camera.ModifyZoom(scrollWheel.Y);
+        }
+
         private static void KeyDown(IKeyboard arg1, Key arg2, int arg3)
         {
             //Check to close the window on escape.
             if (arg2 == Key.Escape)
             {
-                Window.Close();
+                _window.Close();
             }
         }
     }

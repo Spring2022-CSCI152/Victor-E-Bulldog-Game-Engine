@@ -6,7 +6,7 @@ namespace Bulldog.ECS {
     public class Entity : ECSObject {
         
         
-        private readonly List<Component> Components = new List<Component>();
+        public readonly List<Component> Components = new List<Component>();
         internal World World;
         public Entity Parent;
         
