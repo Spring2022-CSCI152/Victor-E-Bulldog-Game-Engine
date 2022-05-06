@@ -17,13 +17,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="src\Renderer\Shaders" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Include="obj\Debug\net6.0\shader.frag" />
       <None Include="obj\Debug\net6.0\shader.vert" />
       <None Include="obj\Debug\net6.0\silk.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="src\Core\ResourceManger.cs" />
+      <Compile Remove="src\ECS\Components\TextComponent.cs" />
+      <Compile Remove="src\ECS\Systems\WriteSystem.cs" />
+      <Compile Remove="src\ECS\Systems\TransformSystem.cs" />
     </ItemGroup>
 
 </Project>
