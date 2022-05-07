@@ -169,5 +169,6 @@ public class Model : IDisposable
         _txcdBuffer.Dispose();
         _indexBuffer.Dispose();
         _vao.Dispose();
+        _texture.Dispose();
     }
 }
