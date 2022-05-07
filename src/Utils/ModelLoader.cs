@@ -9,14 +9,10 @@ public class ModelLoader
     public struct MeshDataStruct
     {
         public uint IndexCount;
-        public uint[] Indices;
         public uint BaseIndex;
         public uint BaseVertex;
     }
 
-    // assimp model
-    private Assimp.Scene _model;
-    
     // temporary containers
     private readonly List<Vector3D> _vertexList = new List<Vector3D>();
     private readonly List<Vector3D> _normalList = new List<Vector3D>();
@@ -36,14 +32,11 @@ public class ModelLoader
     public Vector3D MinVertex = new Vector3D(float.MaxValue,float.MaxValue,float.MaxValue);
     public Vector3D MaxVertex = new Vector3D(float.MinValue,float.MinValue,float.MinValue);
     
-
-
-
-
-
-
-
-    // constructor
+    
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="path">Path to 3D model file.</param>
     public ModelLoader(string path)
     {
         // init assimp
@@ -53,54 +46,55 @@ public class ModelLoader
         // load model with assimp
         try
         {
-            // assimp loads model into _model
-            _model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
-            var result = _model != null ? $"{path} loaded successfully." : $"FAILED TO LOAD: {path}";
+            // assimp loads model into var model
+            var model = importer.ImportFile(path, PostProcessPreset.TargetRealTimeMaximumQuality);
+            // print debug string
+            var result = model != null ? $"{path} loaded successfully." : $"FAILED TO LOAD: {path}";
             Console.WriteLine(result);
 
             // parse assimp mesh data
-            if (_model != null)
+            if (model != null)
             {
                 uint currVertexCount = 0;
                 uint currIndexCount = 0;
 
                 // load each mesh in model
-                // foreach (var mesh in _model.Meshes)
-                for (int i = 0; i < _model.MeshCount; i++)
+                foreach (var currMesh in model.Meshes)
                 {
-                    var currMesh = _model.Meshes[i];
+                    // ASSERT: _model.MeshCount == MeshDataList.Count
+                    // MeshDataList's number of elements MUST EQUAL _model.MeshCount from assimp
                     var currMeshData = new MeshDataStruct();
 
-                    // acc vertices
+                    // accumulate vertices
                     if (currMesh.HasVertices)
                     {
                         _vertexList.AddRange(currMesh.Vertices);
                     }
                     
-                    // acc tex-coords
+                    // accumulate tex-coords
                     if (currMesh.HasTextureCoords(0))
                     {
                         _texCoordList.AddRange(currMesh.TextureCoordinateChannels[0]);
                     }
                     
-                    // acc normals
+                    // accumulate normals
                     if (currMesh.HasNormals)
                     {
                         _normalList.AddRange(currMesh.Normals);
                     }
 
-                    // acc indices
+                    // accumulate indices
                     var currMeshIndices = currMesh.GetUnsignedIndices();
                     _indexList.AddRange(currMeshIndices);
 
                     // set supplemental data
-                    currMeshData.Indices = currMeshIndices;
                     currMeshData.IndexCount = (uint)currMeshIndices.Length;
                     currMeshData.BaseIndex = currIndexCount;
                     currMeshData.BaseVertex = currVertexCount;
-                    // add to list
+                    // add to supplemental data list
                     MeshDataList.Add(currMeshData);
 
+                    // set up next iteration's counts
                     currVertexCount += (uint)currMesh.VertexCount;
                     currIndexCount += currMeshData.IndexCount;
                 }
@@ -119,21 +113,15 @@ public class ModelLoader
             }
 
             // print error if model didn't load
-            else { Console.WriteLine("NuMesh failed to load model: " + path); }
+            else { Console.WriteLine("Model failed to load model: " + path); }
         }
+        // throw if assimp failed to load
         catch (Exception e)
         {
-            Console.WriteLine("Exception: NuMesh failed to load model: " + e);
+            Console.WriteLine("Exception: Model failed to load model: " + e);
             throw;
         }
     }
-    
-    
-    
-    
-    
-    
-    
     
     /// <summary>
     /// Strips each X,Y,Z coordinate out of each <see cref="Vector3D"/> in <paramref name="vectorList"/>.
