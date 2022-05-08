@@ -6,8 +6,8 @@ namespace Bulldog.Renderer
         where TVertexType : unmanaged
         where TIndexType : unmanaged
     {
-        private uint _handle;
-        private GL _gl;
+        private readonly uint _handle;
+        private readonly GL _gl;
 
         public VertexArrayObject(GL gl, BufferObject<TVertexType> vbo, BufferObject<TIndexType> ebo)
         {
@@ -18,7 +18,32 @@ namespace Bulldog.Renderer
             vbo.Bind();
             ebo.Bind();
         }
-        
+
+        /// <summary>
+        /// Constructor that only creates the VAO, and passes the GL context.
+        /// VBOS MUST BE BOUND MANUALLY!
+        /// </summary>
+        /// <param name="gl">OpenGL Context.</param>
+        public VertexArrayObject(GL gl)
+        {
+            _gl = gl;
+            
+            _handle = _gl.GenVertexArray();
+            Bind();
+        }
+
+        public VertexArrayObject(GL gl, List<BufferObject<TVertexType>> vboList, BufferObject<TIndexType> ebo)
+        {
+            _gl = gl;
+            _handle = _gl.GenVertexArray();
+            Bind();
+            foreach (var vbo in vboList)
+            {
+                vbo.Bind();
+            }
+            ebo.Bind();
+        }
+
         /// <summary>
         /// Defines an array of generic vertex attribute data.
         /// </summary>
@@ -36,6 +61,11 @@ namespace Bulldog.Renderer
         public void Bind()
         {
             _gl.BindVertexArray(_handle);
+        }
+
+        public void Unbind()
+        {
+            _gl.BindVertexArray(0);
         }
 
         public void Dispose()
