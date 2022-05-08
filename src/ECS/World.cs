@@ -1,3 +1,4 @@
+using System.Numerics;
 using Bulldog.ECS.Systems;
 namespace Bulldog.ECS {
     public class World : ECSObject {
@@ -10,7 +11,7 @@ namespace Bulldog.ECS {
             Systems = new List<BaseSystem>();
         }
         
-        public void CreateEntity(string name, params Component[] components) {
+        public void CreateEntity(string name, params Components.Component[] components) {
             Entity entity = new Entity(name);
             entity.AddComponents(components);
             AddEntity(entity);
@@ -61,7 +62,7 @@ namespace Bulldog.ECS {
 
         // System Loop //
         enum ForEachType { Init, Update, Draw }
-        private void ForEach(ForEachType type, float dt) {
+        private void ForEach(ForEachType type, Vector3 dt) {
             Systems.ForEach(s => {
                 Entities.ForEach(e => {
                     if(s.Match(e)) { // <- this set CurrentEntity
@@ -82,15 +83,15 @@ namespace Bulldog.ECS {
         }
 
         public void Init() {
-            ForEach(ForEachType.Init, 0);
+            ForEach(ForEachType.Init, Vector3.UnitZ);
         }
 
-        public void Update(float dt) {
+        public void Update(Vector3 dt) {
             ForEach(ForEachType.Update, dt);
         }
 
         public void Draw() {
-            ForEach(ForEachType.Draw, 0);
+            ForEach(ForEachType.Draw, Vector3.UnitZ);
         }
 
         //▼▾ Override ToString  ▾▼//

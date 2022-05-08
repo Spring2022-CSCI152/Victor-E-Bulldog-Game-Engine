@@ -1,14 +1,16 @@
+using System.Numerics;
+
 namespace Bulldog.ECS.Systems
 {
     public abstract class BaseSystem : ECSObject {
         private readonly string[] RequireComponentNames;
-        protected Entity CurrentEntity { get; private set; }
+        protected Entity CurrentEntity { get; set; }
 
         public BaseSystem(params string[] requireComponentNames) {
             RequireComponentNames = requireComponentNames;
         }
 
-        protected T Get<T>() where T : Component {
+        protected T Get<T>() where T : Components.Component {
             return CurrentEntity.GetComponent<T>();
         }
 
@@ -24,7 +26,7 @@ namespace Bulldog.ECS.Systems
         }
 
         public virtual void Init() { }
-        public virtual void Update(float dt) { }
+        public virtual void Update(Vector3 vector3) { }
         public virtual void Draw() { }
 
         public override string ToString() {

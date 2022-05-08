@@ -1,11 +1,20 @@
-using Bulldog.ECS.Componets;
+using System.Numerics;
+using Bulldog.ECS.Components;
 
 namespace Bulldog.ECS.Systems;
 
 public class TransformSystem : BaseSystem
 {
-    public override void Update(float dt)
+    public TransformSystem() : base(new[] { "TransformComponent" }) {}
+
+    private void SetCurrentEntity(Entity entity)
     {
-        base.Update(dt);
+        CurrentEntity = entity;
+    }
+
+    public override void Update(Vector3 dt)
+    {
+        var transform = CurrentEntity.GetComponent<TransformComponent>();
+        transform.Position += dt;
     }
 }

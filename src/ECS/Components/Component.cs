@@ -1,4 +1,4 @@
-namespace Bulldog.ECS
+namespace Bulldog.ECS.Components
 {
     public abstract class Component : ECSObject
     {
