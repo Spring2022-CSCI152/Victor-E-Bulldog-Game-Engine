@@ -16,6 +16,5 @@ public class MeshTest
     [Fact]
     public void MakeMeshComponent()
     {
-        
     }
 }

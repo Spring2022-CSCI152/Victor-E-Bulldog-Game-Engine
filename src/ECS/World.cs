@@ -25,7 +25,7 @@ namespace Bulldog.ECS {
             entity.World = this;
         }
 
-        public void AddEntities(params Entity[] entities) {
+        public void AddEntities(List<Entity> entities) {
             foreach(Entity entity in entities)
                 AddEntity(entity);
         }

@@ -23,6 +23,8 @@ namespace Bulldog.ECS {
 
             Components.Add(component);
         }
+        
+        
 
         public void AddComponents(params Component[] components) {
             foreach(Component component in components)
