@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using Bulldog.ECS.Components;
+using Bulldog.ECS.Componets;
 
 namespace Bulldog.ECS {
 
@@ -17,15 +19,14 @@ namespace Bulldog.ECS {
             Name = name;
         }
 
-        public void AddComponent(Component component) {
+        public void AddComponent(Component  component)
+        {
             if(Helper.CheckExistName(Components, component, this))
                 return;
 
             Components.Add(component);
         }
         
-        
-
         public void AddComponents(params Component[] components) {
             foreach(Component component in components)
                 AddComponent(component);

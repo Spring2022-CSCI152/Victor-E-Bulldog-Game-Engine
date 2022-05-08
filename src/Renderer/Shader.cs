@@ -44,6 +44,15 @@ namespace Bulldog.Renderer
             _gl.Uniform1(location, value);
         }
 
+        public GL GetGl()
+        {
+            return _gl;
+        }
+
+        public void SetGl(GL gl)
+        {
+            _gl = gl;
+        }
         public void SetUniform(string name, float value)
         {
             int location = _gl.GetUniformLocation(_handle, name);

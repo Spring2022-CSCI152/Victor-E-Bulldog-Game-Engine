@@ -1,4 +1,5 @@
 ﻿using Bulldog.ECS;
+using Bulldog.ECS.Componets;
 using Moq;
 
 namespace Bulldog.test.ECSTests;
@@ -7,11 +8,11 @@ using Xunit;
 public class EntityTest
 {
     private readonly Entity _sut;
-    private readonly Component _c; //this should be a mesh
-    private readonly Component _c2; //this should be a mesh
+   // private readonly Mesh _c; //this should be a mesh
+   // private readonly Position _c2; //this should be a position
 
-    //private readonly Mesh _c; 
-    //private readonly Mesh _c2; 
+    private readonly  Component _c; 
+    private readonly Component _c2; 
    
     private readonly Component[] _components;
 
@@ -20,8 +21,8 @@ public class EntityTest
     {
         _sut = new Entity("Test");
         _components = new Component[2];
-        //c = new Mesh();
-        //c2 = new Mesh();
+        // _c = new Mesh();
+        // _c2 = new Position();
         
        _c.Name = "TestC";
        _c2.Name = "TestC2";
@@ -60,11 +61,9 @@ public class EntityTest
     [Fact(Skip = "Object reference not set to an instance of an object. This is because of Abstract class and our working functions do not work with derived classes  ")]
     public void TestRemoveComponent()
     {
-        _sut.AddComponents(_components);
-        TestHasComponent();
+        _sut.AddComponent(_c);
+        Assert.Equal(_components[0], _sut.GetComponent("TestC"));
         _sut.RemoveComponent("TestC");
-        //Assert.Equal(1, cs.Length);
-        Assert.Single(_components);
-        //Assert.True(_sut.RemoveComponent("TestC2"));
+        Assert.Empty(_components);        
     }
 }
